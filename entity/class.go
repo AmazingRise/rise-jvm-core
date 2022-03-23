@@ -1,4 +1,4 @@
-package loader
+package entity
 
 type Class struct {
 	This      string

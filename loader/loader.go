@@ -5,12 +5,13 @@ import (
 	"encoding/binary"
 	"io"
 	"log"
+	"wasm-jvm/entity"
 	"wasm-jvm/utils"
 )
 
 type ClassLoader struct {
 	file  io.Reader
-	class *Class
+	class *entity.Class
 }
 
 // Logger
@@ -26,9 +27,9 @@ func CreateLoader(logger utils.Logger) *ClassLoader {
 }
 
 // Load To load the class
-func (l *ClassLoader) Load(classFile io.Reader) *Class {
+func (l *ClassLoader) Load(classFile io.Reader) *entity.Class {
 	l.file = classFile
-	l.class = &Class{}
+	l.class = &entity.Class{}
 	if !bytes.Equal(l.readBytes(4), []byte{0xCA, 0xFE, 0xBA, 0xBE}) { // magic number
 		errLog.Fatal("invalid java class file")
 	}
@@ -72,10 +73,10 @@ func (l *ClassLoader) loadMeta() {
 	c.Flags = l.u2() // access_flags
 
 	thisIdx := l.u2()                     // this_class
-	c.This = p.getClassNameByIdx(thisIdx) // get the name of this
+	c.This = p.GetClassNameByIdx(thisIdx) // get the name of this
 
 	superIdx := l.u2()                      // super_class
-	c.Super = p.getClassNameByIdx(superIdx) // get the name of super
+	c.Super = p.GetClassNameByIdx(superIdx) // get the name of super
 	iCount := l.u2()                        // interfaces_count
 	// interfaces
 	debugLog.Println("Interfaces: ", iCount)
