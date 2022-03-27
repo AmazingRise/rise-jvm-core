@@ -1,17 +1,14 @@
 package jvm
 
 import (
-	"fmt"
 	"wasm-jvm/entity"
+	"wasm-jvm/logger"
 )
 
 type VM struct {
-	threads []Thread
+	threads []*Thread
 	classes map[string]*entity.Class
 }
-
-const StackSize = 100
-const HeapSize = 1024
 
 func CreateVM() *VM {
 	vm := &VM{
@@ -25,34 +22,19 @@ func (v *VM) AppendClass(class *entity.Class) {
 	v.classes[class.This] = class
 }
 
-// Boot to boot a JVM with loaded classes
+// Boot to boot a JVM
 func (v *VM) Boot() {
-	// search for a public class with a static main method
-	main := v.findMain()
-	if main == nil {
-		panic("classes does not contain a main")
-	}
-	v.Exec(main.Code)
+	v.InvokeMain()
+	v.Schedule()
 }
 
-func (v *VM) findMain() *entity.Method {
-	for _, c := range v.classes {
-		main, ok := c.Methods["main"]
-		if c.IsPublic() && ok && main.IsPublic() && main.IsStatic() {
-			return main
+// Schedule find ready threads and execute it, then switch between threads
+func (v *VM) Schedule() {
+	// Currently, we only support single thread
+	for _, thread := range v.threads {
+		if thread.State == ThreadReady {
+			result := thread.Exec()
+			logger.Infoln("Thread exits, with a result", result)
 		}
 	}
-	return nil
-}
-
-func (v *VM) Exec(code entity.ByteCode) {
-	// byteCode := code.Bytes
-	for _, b := range code.Bytes {
-		fmt.Printf("%02X ", b)
-	}
-	//fmt.Println(code)
-}
-
-func (v *VM) ExecStaticMethod(className string, methodName string) {
-	v.Exec(v.classes[className].Methods[methodName].Code)
 }

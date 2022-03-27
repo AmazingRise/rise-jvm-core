@@ -13,7 +13,7 @@ attribute_info {
 }
 */
 
-func (l *ClassLoader) readAttributes(count uint16) []entity.Attribute {
+func (l *Loader) ReadAttributes(count uint16) []entity.Attribute {
 	var result []entity.Attribute
 	var i uint16
 	for i = 0; i < count; i++ {
@@ -22,7 +22,7 @@ func (l *ClassLoader) readAttributes(count uint16) []entity.Attribute {
 		logger.Infoln("Attribute:", name)
 		aLen := l.u4() // attribute length
 		bytes := l.readBytes(int(aLen))
-		result = append(result, entity.Attribute{name, bytes})
+		result = append(result, entity.Attribute{Name: name, Bytes: bytes})
 	}
 	return result
 }

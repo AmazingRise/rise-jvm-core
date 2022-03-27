@@ -3,7 +3,7 @@ package entity
 type ByteCode struct {
 	MaxStack       uint16
 	MaxLocals      uint16
-	Bytes          []byte
+	Text           []byte
 	ExceptionTable []Exception
 }
 

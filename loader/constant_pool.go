@@ -5,7 +5,7 @@ import (
 	"wasm-jvm/logger"
 )
 
-func (l *ClassLoader) readConstantPool(count uint16) {
+func (l *Loader) readConstantPool(count uint16) {
 	pool := entity.ConstantPool{}
 	pool.Utf8Constants = make(map[uint16]string)
 	pool.ClassConstants = make(map[uint16]uint16)

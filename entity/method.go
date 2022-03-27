@@ -5,7 +5,6 @@ type Method struct {
 	Flags      uint16
 	Descriptor string
 	Attrs      []Attribute
-	Code       ByteCode
 }
 
 func (m *Method) IsPublic() bool {

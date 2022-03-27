@@ -15,7 +15,7 @@ func InitLogger(debug, warn, error io.Writer) {
 }
 
 func Infoln(v ...interface{}) {
-	debugLogger.Println(v)
+	debugLogger.Println(v...)
 }
 
 func Infof(format string, v ...interface{}) {
@@ -23,7 +23,7 @@ func Infof(format string, v ...interface{}) {
 }
 
 func Warnln(v ...interface{}) {
-	warnLogger.Println(v)
+	warnLogger.Println(v...)
 }
 
 func Warnf(format string, v ...interface{}) {
@@ -31,14 +31,14 @@ func Warnf(format string, v ...interface{}) {
 }
 
 func Errorln(v ...interface{}) {
-	errLogger.Fatalln(v)
+	errLogger.Fatalln(v...)
 }
 
 func Errorf(format string, v ...interface{}) {
 	errLogger.Fatalf(format, v...)
 }
 
-func printHex(bytes []byte) {
+func PrintHex(bytes []byte) {
 	for _, b := range bytes {
 		fmt.Printf("%x", b)
 	}

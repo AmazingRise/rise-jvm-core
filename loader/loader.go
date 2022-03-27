@@ -8,20 +8,19 @@ import (
 	"wasm-jvm/utils"
 )
 
-type ClassLoader struct {
+type Loader struct {
 	reader *utils.Reader
 	//file   io.Reader
 	class *entity.Class
 }
 
 // CreateLoader Initialization
-func CreateLoader() *ClassLoader {
-	return &ClassLoader{}
+func CreateLoader() *Loader {
+	return &Loader{}
 }
 
-// Load To load the class
-func (l *ClassLoader) Load(classFile io.Reader) *entity.Class {
-	//l.file = classFile
+// LoadClass To load the class
+func (l *Loader) LoadClass(classFile io.Reader) *entity.Class {
 	l.reader = utils.CreateReader(classFile)
 	l.class = &entity.Class{}
 	if !bytes.Equal(l.readBytes(4), []byte{0xCA, 0xFE, 0xBA, 0xBE}) { // magic number
@@ -52,7 +51,7 @@ ClassFile {
     attribute_info attributes[attributes_count];
 }
 */
-func (l *ClassLoader) loadMeta() {
+func (l *Loader) loadMeta() {
 	c := l.class
 	l.readBytes(2)          // minor version
 	major := l.readBytes(2) // major version
@@ -90,18 +89,18 @@ func (l *ClassLoader) loadMeta() {
 
 	aCount := l.u2() // attributes_count
 	// attributes
-	l.readAttributes(aCount)
+	l.ReadAttributes(aCount)
 }
 
 // Utils
 
 // From https://zserge.com/posts/jvm/
-func (l *ClassLoader) u1() uint8  { return l.readBytes(1)[0] }
-func (l *ClassLoader) u2() uint16 { return l.reader.U2() }
-func (l *ClassLoader) u4() uint32 { return l.reader.U4() }
-func (l *ClassLoader) u8() uint64 { return l.reader.U8() }
+func (l *Loader) u1() uint8  { return l.readBytes(1)[0] }
+func (l *Loader) u2() uint16 { return l.reader.U2() }
+func (l *Loader) u4() uint32 { return l.reader.U4() }
+func (l *Loader) u8() uint64 { return l.reader.U8() }
 
-func (l *ClassLoader) readBytes(n int) []byte {
+func (l *Loader) readBytes(n int) []byte {
 	return l.reader.ReadBytes(n)
 }
 

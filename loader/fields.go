@@ -10,14 +10,14 @@ field_info {
 }
 */
 
-func (l *ClassLoader) readFields(count uint16) {
+func (l *Loader) readFields(count uint16) {
 	var i uint16
 	for i = 0; i < count; i++ {
 		l.u2()                   // access flags
 		l.u2()                   // name index
 		l.u2()                   // descriptor index
 		aCount := l.u2()         // attributes_count
-		l.readAttributes(aCount) // read attributes
+		l.ReadAttributes(aCount) // read attributes
 	}
 
 }

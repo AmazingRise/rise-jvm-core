@@ -15,7 +15,7 @@ method_info {
 }
 */
 
-func (l *ClassLoader) readMethods(count uint16) {
+func (l *Loader) readMethods(count uint16) {
 	var i uint16
 	c := l.class
 	c.Methods = make(map[string]*entity.Method)
@@ -28,16 +28,9 @@ func (l *ClassLoader) readMethods(count uint16) {
 		logger.Infoln("Method Name: ", method.Name)
 		descIdx := l.u2() // descriptor index
 		method.Descriptor = c.Constants.GetUtf8Constant(descIdx)
+		logger.Infoln("Method descriptor:", method.Descriptor)
 		aCount := l.u2() // attribute count
-		method.Attrs = l.readAttributes(aCount)
-		// Range attributes, to get the code
-		for _, attr := range method.Attrs {
-			// Contains only one code attribute
-			if attr.Name == "code" {
-				
-				break
-			}
-		}
+		method.Attrs = l.ReadAttributes(aCount)
 		c.Methods[method.Name] = method
 	}
 }
