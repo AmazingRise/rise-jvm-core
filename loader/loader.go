@@ -4,25 +4,19 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
-	"log"
 	"wasm-jvm/entity"
+	"wasm-jvm/logger"
 	"wasm-jvm/utils"
 )
 
 type ClassLoader struct {
-	file  io.Reader
-	class *entity.Class
+	reader *utils.Reader
+	file   io.Reader
+	class  *entity.Class
 }
 
-// Logger
-var debugLog, infoLog, warnLog, errLog *log.Logger
-
 // CreateLoader Initialization
-func CreateLoader(logger utils.Logger) *ClassLoader {
-	errLog = logger.ErrorLogger
-	warnLog = logger.WarnLogger
-	infoLog = logger.InfoLogger
-	debugLog = logger.DebugLogger
+func CreateLoader() *ClassLoader {
 	return &ClassLoader{}
 }
 
@@ -31,7 +25,7 @@ func (l *ClassLoader) Load(classFile io.Reader) *entity.Class {
 	l.file = classFile
 	l.class = &entity.Class{}
 	if !bytes.Equal(l.readBytes(4), []byte{0xCA, 0xFE, 0xBA, 0xBE}) { // magic number
-		errLog.Fatal("invalid java class file")
+		logger.Errorln("invalid java class file")
 	}
 	l.loadMeta()
 	return l.class
@@ -62,11 +56,11 @@ func (l *ClassLoader) loadMeta() {
 	c := l.class
 	l.readBytes(2)          // minor version
 	major := l.readBytes(2) // major version
-	debugLog.Println("Java Version: ", majorToInt(major))
+	logger.Infoln("Java Version: ", majorToInt(major))
 
 	constantPoolCount := l.u2() - 1
 	// in JVM specification, here should be minus 1
-	debugLog.Println("Constant Pool Count: ", constantPoolCount)
+	logger.Infoln("Constant Pool Count: ", constantPoolCount)
 	l.readConstantPool(constantPoolCount)
 	p := c.Constants // constant pool
 
@@ -79,19 +73,19 @@ func (l *ClassLoader) loadMeta() {
 	c.Super = p.GetClassNameByIdx(superIdx) // get the name of super
 	iCount := l.u2()                        // interfaces_count
 	// interfaces
-	debugLog.Println("Interfaces: ", iCount)
+	logger.Infoln("Interfaces: ", iCount)
 	for i := 0; i < int(iCount); i++ {
 		l.u2()
 	}
 
 	fCount := l.u2() // fields_count
 	// fields
-	debugLog.Println("Fields: ", fCount)
+	logger.Infoln("Fields: ", fCount)
 	l.readFields(fCount)
 
 	mCount := l.u2() // methods_count
 	// methods
-	debugLog.Println("Methods: ", mCount)
+	logger.Infoln("Methods: ", mCount)
 	l.readMethods(mCount)
 
 	aCount := l.u2() // attributes_count
@@ -110,9 +104,9 @@ func (l *ClassLoader) u8() uint64 { return binary.BigEndian.Uint64(l.readBytes(8
 func (l *ClassLoader) readBytes(n int) []byte {
 	bs := make([]byte, n)
 	if _, err := io.ReadFull(l.file, bs); err != nil {
-		errLog.Fatal("unexpected EOF: ", err.Error())
+		logger.Errorln("unexpected EOF: ", err.Error())
 	}
-	//debugLog.Println(n, "bytes >> ", bs)
+	//logger.Infoln(n, "bytes >> ", bs)
 	return bs
 }
 

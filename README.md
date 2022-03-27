@@ -21,8 +21,9 @@ Project structure:
 ├── go.mod
 ├── jvm        // Code: Virtual Machine
 ├── loader     // Code: Class Loader
+├── logger     // Code: Logger
 ├── main.go    // Code: Entrance
-└── utils      // Code: Utilities, like logger
+└── utils      // Code: Utilities
 ```
 
 ### `loader`

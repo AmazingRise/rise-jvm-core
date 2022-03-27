@@ -1,6 +1,9 @@
 package loader
 
-import "wasm-jvm/entity"
+import (
+	"wasm-jvm/entity"
+	"wasm-jvm/logger"
+)
 
 func (l *ClassLoader) readConstantPool(count uint16) {
 	pool := entity.ConstantPool{}
@@ -9,7 +12,7 @@ func (l *ClassLoader) readConstantPool(count uint16) {
 	var i uint16
 	for i = 1; i <= count; i++ {
 		tag := l.u1()
-		debugLog.Printf("Constant #%d (tag: %d)", i, tag)
+		logger.Infof("Constant #%d (tag: %d)", i, tag)
 		switch tag {
 		case entity.ConstantClass:
 			// Class info
@@ -36,12 +39,12 @@ func (l *ClassLoader) readConstantPool(count uint16) {
 		case entity.ConstantNameandtype:
 			nameIdx := l.u2() // name_index
 			descIdx := l.u2() // descriptor_index
-			debugLog.Printf("Name and types: name_index #%d, desc_index #%d", nameIdx, descIdx)
+			logger.Infof("Name and types: name_index #%d, desc_index #%d", nameIdx, descIdx)
 		case entity.ConstantUtf8:
 			length := l.u2() // length
 			stringConst := l.readBytes(int(length))
 			pool.Utf8Constants[i] = string(stringConst)
-			debugLog.Printf("#%d string(%d): %s", i, length, string(stringConst))
+			logger.Infof("#%d string(%d): %s", i, length, string(stringConst))
 		case entity.CONSTANT_InvokeDynamic:
 			l.u2()
 			l.u2()
@@ -49,10 +52,10 @@ func (l *ClassLoader) readConstantPool(count uint16) {
 			l.u1()
 			l.u2()
 		default:
-			errLog.Fatalf("Should not reach here.")
+			logger.Errorln("Should not reach here.")
 		}
 	}
 	// after reading constant pool:
-	//fmt.Println(nameIdx)
+	//fmt.Infoln(nameIdx)
 	l.class.Constants = &pool
 }

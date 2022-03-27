@@ -1,6 +1,9 @@
 package loader
 
-import "wasm-jvm/entity"
+import (
+	"wasm-jvm/entity"
+	"wasm-jvm/logger"
+)
 
 /*
 method_info {
@@ -19,10 +22,10 @@ func (l *ClassLoader) readMethods(count uint16) {
 	for i = 0; i < count; i++ {
 		method := &entity.Method{}
 		method.Flags = l.u2() // access flags
-		debugLog.Printf("Method flags: %b", method.Flags)
+		logger.Infof("Method flags: %b", method.Flags)
 		nameIdx := l.u2() // name index
 		method.Name = c.Constants.GetUtf8Constant(nameIdx)
-		debugLog.Println("Method Name: ", method.Name)
+		logger.Infoln("Method Name: ", method.Name)
 		descIdx := l.u2() // descriptor index
 		method.Descriptor = c.Constants.GetUtf8Constant(descIdx)
 		aCount := l.u2() // attribute count

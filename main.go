@@ -5,19 +5,19 @@ import (
 	"os"
 	"wasm-jvm/jvm"
 	"wasm-jvm/loader"
-	"wasm-jvm/utils"
+	"wasm-jvm/logger"
 )
 
 func main() {
-	logger := utils.CreateLogger(os.Stdout, os.Stdout, os.Stdout, os.Stderr)
+	logger.InitLogger(os.Stdout, os.Stdout, os.Stdout)
 
 	file, _ := os.Open("./Add.class")
-	l := loader.CreateLoader(logger)
+	l := loader.CreateLoader()
 
 	class := l.Load(file)
 	fmt.Println("Class name: ", class.This, "@", class.Super)
 
-	vm := jvm.CreateVM(logger)
+	vm := jvm.CreateVM()
 	vm.AppendClass(class)
 	//vm.Boot()
 	vm.ExecStaticMethod("Add", "Add5")

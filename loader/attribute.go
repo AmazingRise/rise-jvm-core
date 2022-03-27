@@ -1,6 +1,9 @@
 package loader
 
-import "wasm-jvm/entity"
+import (
+	"wasm-jvm/entity"
+	"wasm-jvm/logger"
+)
 
 /*
 attribute_info {
@@ -16,30 +19,10 @@ func (l *ClassLoader) readAttributes(count uint16) []entity.Attribute {
 	for i = 0; i < count; i++ {
 		nameIdx := l.u2()
 		name := l.class.Constants.GetUtf8Constant(nameIdx)
-		debugLog.Println("Attribute:", name)
+		logger.Infoln("Attribute:", name)
 		aLen := l.u4() // attribute length
 		bytes := l.readBytes(int(aLen))
 		result = append(result, entity.Attribute{name, bytes})
 	}
 	return result
 }
-
-/*
-func (l *ClassLoader) readCode() (code Code) {
-	code.MaxStack = l.u2()                 // max stack
-	code.MaxLocals = l.u2()                // max locals
-	codeLen := l.u4()                      // code length
-	code.Bytes = l.readBytes(int(codeLen)) // code
-	exTableLen := l.u2()
-	code.ExceptionTable = make([]Exception, exTableLen)
-	for i := 0; i < int(exTableLen); i++ {
-		code.ExceptionTable[i].StartPc = l.u2()
-		code.ExceptionTable[i].EndPc = l.u2()
-		code.ExceptionTable[i].HandlerPc = l.u2()
-		code.ExceptionTable[i].CatchType = l.u2()
-	}
-	//fmt.Println(code)
-	l.readAttributes(l.u2())
-	return
-}
-*/

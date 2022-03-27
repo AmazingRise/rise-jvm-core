@@ -2,9 +2,7 @@ package jvm
 
 import (
 	"fmt"
-	"log"
 	"wasm-jvm/entity"
-	"wasm-jvm/utils"
 )
 
 type VM struct {
@@ -15,15 +13,7 @@ type VM struct {
 const StackSize = 100
 const HeapSize = 1024
 
-// Logger
-var debugLog, infoLog, warnLog, errLog *log.Logger
-
-func CreateVM(logger utils.Logger) *VM {
-	errLog = logger.ErrorLogger
-	warnLog = logger.WarnLogger
-	infoLog = logger.InfoLogger
-	debugLog = logger.DebugLogger
-
+func CreateVM() *VM {
 	vm := &VM{
 		classes: make(map[string]*entity.Class),
 	}
