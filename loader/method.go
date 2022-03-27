@@ -34,7 +34,7 @@ func (l *ClassLoader) readMethods(count uint16) {
 		for _, attr := range method.Attrs {
 			// Contains only one code attribute
 			if attr.Name == "code" {
-
+				
 				break
 			}
 		}

@@ -41,7 +41,7 @@ Code of JVM.
 
 ## Acknowledgement
 
-[zserge/tojvm](https://github.com/zserge/tojvm). Some snippets in `loader` are from here.
+[zserge/tojvm](https://github.com/zserge/tojvm). Some snippets in `loader` are from here. They are noted in comments.
 
 ## License
 

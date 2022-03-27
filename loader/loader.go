@@ -2,7 +2,6 @@ package loader
 
 import (
 	"bytes"
-	"encoding/binary"
 	"io"
 	"wasm-jvm/entity"
 	"wasm-jvm/logger"
@@ -11,8 +10,8 @@ import (
 
 type ClassLoader struct {
 	reader *utils.Reader
-	file   io.Reader
-	class  *entity.Class
+	//file   io.Reader
+	class *entity.Class
 }
 
 // CreateLoader Initialization
@@ -22,7 +21,8 @@ func CreateLoader() *ClassLoader {
 
 // Load To load the class
 func (l *ClassLoader) Load(classFile io.Reader) *entity.Class {
-	l.file = classFile
+	//l.file = classFile
+	l.reader = utils.CreateReader(classFile)
 	l.class = &entity.Class{}
 	if !bytes.Equal(l.readBytes(4), []byte{0xCA, 0xFE, 0xBA, 0xBE}) { // magic number
 		logger.Errorln("invalid java class file")
@@ -97,17 +97,12 @@ func (l *ClassLoader) loadMeta() {
 
 // From https://zserge.com/posts/jvm/
 func (l *ClassLoader) u1() uint8  { return l.readBytes(1)[0] }
-func (l *ClassLoader) u2() uint16 { return binary.BigEndian.Uint16(l.readBytes(2)) }
-func (l *ClassLoader) u4() uint32 { return binary.BigEndian.Uint32(l.readBytes(4)) }
-func (l *ClassLoader) u8() uint64 { return binary.BigEndian.Uint64(l.readBytes(8)) }
+func (l *ClassLoader) u2() uint16 { return l.reader.U2() }
+func (l *ClassLoader) u4() uint32 { return l.reader.U4() }
+func (l *ClassLoader) u8() uint64 { return l.reader.U8() }
 
 func (l *ClassLoader) readBytes(n int) []byte {
-	bs := make([]byte, n)
-	if _, err := io.ReadFull(l.file, bs); err != nil {
-		logger.Errorln("unexpected EOF: ", err.Error())
-	}
-	//logger.Infoln(n, "bytes >> ", bs)
-	return bs
+	return l.reader.ReadBytes(n)
 }
 
 func majorToInt(bytes []byte) int {
