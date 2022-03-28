@@ -3,7 +3,7 @@ package entity
 type Class struct {
 	This      string
 	Methods   map[string]*Method
-	Constants *ConstantPool
+	Constants *ConstPool
 	Super     string
 	Flags     uint16
 }

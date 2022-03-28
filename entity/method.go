@@ -1,10 +1,10 @@
 package entity
 
 type Method struct {
-	Name       string
-	Flags      uint16
-	Descriptor string
-	Attrs      []Attribute
+	Name  string
+	Flags uint16
+	Desc  string
+	Attrs []Attribute
 }
 
 func (m *Method) IsPublic() bool {

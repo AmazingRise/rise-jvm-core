@@ -37,6 +37,7 @@ func (v *VM) LocateMethod(className string, methodName string) *entity.Method {
 }
 
 func (v *VM) InvokeStaticMethod(method *entity.Method, args ...interface{}) {
+	// TODO: Some check
 	v.invoke(method, args...)
 }
 

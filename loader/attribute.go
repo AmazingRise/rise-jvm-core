@@ -18,7 +18,7 @@ func (l *Loader) ReadAttributes(count uint16) []entity.Attribute {
 	var i uint16
 	for i = 0; i < count; i++ {
 		nameIdx := l.u2()
-		name := l.class.Constants.GetUtf8Constant(nameIdx)
+		name := l.class.Constants.GetUtf8Const(nameIdx)
 		logger.Infoln("Attribute:", name)
 		aLen := l.u4() // attribute length
 		bytes := l.readBytes(int(aLen))

@@ -24,11 +24,11 @@ func (l *Loader) readMethods(count uint16) {
 		method.Flags = l.u2() // access flags
 		logger.Infof("Method flags: %b", method.Flags)
 		nameIdx := l.u2() // name index
-		method.Name = c.Constants.GetUtf8Constant(nameIdx)
+		method.Name = c.Constants.GetUtf8Const(nameIdx)
 		logger.Infoln("Method Name: ", method.Name)
 		descIdx := l.u2() // descriptor index
-		method.Descriptor = c.Constants.GetUtf8Constant(descIdx)
-		logger.Infoln("Method descriptor:", method.Descriptor)
+		method.Desc = c.Constants.GetUtf8Const(descIdx)
+		logger.Infoln("Method descriptor:", method.Desc)
 		aCount := l.u2() // attribute count
 		method.Attrs = l.ReadAttributes(aCount)
 		c.Methods[method.Name] = method

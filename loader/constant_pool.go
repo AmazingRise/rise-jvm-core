@@ -6,9 +6,9 @@ import (
 )
 
 func (l *Loader) readConstantPool(count uint16) {
-	pool := entity.ConstantPool{}
-	pool.Utf8Constants = make(map[uint16]string)
-	pool.ClassConstants = make(map[uint16]uint16)
+	pool := entity.ConstPool{}
+	pool.Utf8Const = make(map[uint16]string)
+	pool.ClassConst = make(map[uint16]uint16)
 	var i uint16
 	for i = 1; i <= count; i++ {
 		tag := l.u1()
@@ -17,22 +17,34 @@ func (l *Loader) readConstantPool(count uint16) {
 		case entity.ConstantClass:
 			// Class info
 			//nameIdx = l.u2() // name_index
-			pool.ClassConstants[i] = l.u2()
+			pool.ClassConst[i] = l.u2()
 		case entity.ConstantMethodref:
-			fallthrough
+			ref := entity.Ref{
+				ClassIdx:    l.u2(),
+				NameTypeIdx: l.u2(),
+			}
+			pool.MethodRefConst[i] = ref
 		case entity.ConstantInterfacemethodref:
-			fallthrough
+			ref := entity.Ref{
+				ClassIdx:    l.u2(),
+				NameTypeIdx: l.u2(),
+			}
+			pool.InterfaceMethodRefConst[i] = ref
 		case entity.ConstantFieldref:
-			l.readBytes(2) // class_index
-			l.readBytes(2) // name_and_type_index
+			ref := entity.Ref{
+				ClassIdx:    l.u2(),
+				NameTypeIdx: l.u2(),
+			}
+			pool.FieldRefConst[i] = ref
 		case entity.ConstantString:
-			l.readBytes(2) // string_index
+			pool.StrConst[i] = l.u2()
 		case entity.ConstantInteger:
-			l.readBytes(4) // bytes
+			pool.IntConst[i] = int(l.u4())
 		case entity.ConstantFloat:
-			l.readBytes(4) // bytes
+			// pool.FloatConst[i] = float32(l.u4())
+			l.u4()
 		case entity.ConstantLong:
-			fallthrough
+			pool.LongConst[i] = int64(l.u8())
 		case entity.ConstantDouble:
 			l.readBytes(4) // high bytes
 			l.readBytes(4) // low bytes
@@ -43,7 +55,7 @@ func (l *Loader) readConstantPool(count uint16) {
 		case entity.ConstantUtf8:
 			length := l.u2() // length
 			stringConst := l.readBytes(int(length))
-			pool.Utf8Constants[i] = string(stringConst)
+			pool.Utf8Const[i] = string(stringConst)
 			logger.Infof("#%d string(%d): %s", i, length, string(stringConst))
 		case entity.CONSTANT_InvokeDynamic:
 			l.u2()

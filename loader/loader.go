@@ -65,12 +65,12 @@ func (l *Loader) loadMeta() {
 
 	c.Flags = l.u2() // access_flags
 
-	thisIdx := l.u2()                     // this_class
-	c.This = p.GetClassNameByIdx(thisIdx) // get the name of this
+	thisIdx := l.u2()                // this_class
+	c.This = p.GetClassName(thisIdx) // get the name of this
 
-	superIdx := l.u2()                      // super_class
-	c.Super = p.GetClassNameByIdx(superIdx) // get the name of super
-	iCount := l.u2()                        // interfaces_count
+	superIdx := l.u2()                 // super_class
+	c.Super = p.GetClassName(superIdx) // get the name of super
+	iCount := l.u2()                   // interfaces_count
 	// interfaces
 	logger.Infoln("Interfaces: ", iCount)
 	for i := 0; i < int(iCount); i++ {
