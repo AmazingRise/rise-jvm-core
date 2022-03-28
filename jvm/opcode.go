@@ -1,11 +1,28 @@
 package jvm
 
 const (
-	OpILoad   = 0x15
-	OpILoad0  = 0x1a
-	OpILoad1  = 0x1b
-	OpILoad2  = 0x1c
-	OpILoad3  = 0x1d
+	OpIConstM1 = 0x2
+	OpIConst0  = 0x3
+	OpIConst1  = 0x4
+	OpIConst2  = 0x5
+	OpIConst3  = 0x6
+	OpIConst4  = 0x7
+	OpIConst5  = 0x8
+	OpILoad    = 0x15
+	OpILoad0   = 0x1a
+	OpILoad1   = 0x1b
+	OpILoad2   = 0x1c
+	OpILoad3   = 0x1d
+	OpIStore   = 0x36
+	OpIStore0  = 0x3b
+	OpIStore1  = 0x3c
+	OpIStore2  = 0x3d
+	OpIStore3  = 0x3e
+
 	OpIAdd    = 0x60
+	OpIMul    = 0x68
 	OpIReturn = 0xAC
+
+	OpBiPush = 0x10
+	OpSiPush = 0x11
 )

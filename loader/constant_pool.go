@@ -6,9 +6,20 @@ import (
 )
 
 func (l *Loader) readConstantPool(count uint16) {
-	pool := entity.ConstPool{}
-	pool.Utf8Const = make(map[uint16]string)
-	pool.ClassConst = make(map[uint16]uint16)
+	pool := entity.ConstPool{
+		Utf8Const:               make(map[uint16]string),
+		ClassConst:              make(map[uint16]uint16),
+		MethodRefConst:          make(map[uint16]entity.Ref),
+		FieldRefConst:           make(map[uint16]entity.Ref),
+		InterfaceMethodRefConst: make(map[uint16]entity.Ref),
+		StrConst:                make(map[uint16]uint16),
+		IntConst:                make(map[uint16]int),
+		FloatConst:              make(map[uint16]float32),
+		LongConst:               make(map[uint16]int64),
+		DoubleConst:             make(map[uint16]float64),
+		NameTypeConst:           make(map[uint16]entity.NameType),
+	}
+
 	var i uint16
 	for i = 1; i <= count; i++ {
 		tag := l.u1()

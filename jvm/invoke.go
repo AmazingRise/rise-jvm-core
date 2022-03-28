@@ -22,6 +22,7 @@ func (v *VM) invoke(method *entity.Method, args ...interface{}) {
 	}
 	//logger.Infoln(thread.Text)
 	// Load arguments
+	thread.Locals = make([]interface{}, thread.MaxLocals)
 	n := len(args)
 	for i := n - 1; i >= 0; i-- {
 		thread.Locals = append(thread.Locals, args[i])
