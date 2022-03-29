@@ -118,7 +118,6 @@ func (p *ThreadPool) Schedule() {
 			}
 		case FramePush: // if current frame pushed a new frame
 			// Get the old stack
-			logger.Infoln("Frame of thread", curr.Id, "pushed a new frame.")
 			dataStack := frameStack[len(frameStack)-1].Stack
 			// Restore the frame state
 			frameStack[len(frameStack)-1].State = FrameReady
@@ -128,10 +127,13 @@ func (p *ThreadPool) Schedule() {
 			class, name, _ := frameStack[len(frameStack)-1].This.Constants.GetMethodRef(idx)
 			method := p.vm.LocateMethod(class, name)
 			frame := p.vm.InvokeStaticMethod(method, dataStack...)
+			logger.Infof("Frame of thread %d pushed a new frame named %s::%s.", curr.Id, class, name)
 			// Empty the stack
 			frameStack[len(frameStack)-1].Stack = []interface{}{}
 			// Push the frame
 			curr.FrameStack = append(curr.FrameStack, frame)
+		case FramePatch:
+
 		}
 
 	}

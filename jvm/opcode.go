@@ -1,6 +1,8 @@
 package jvm
 
 const (
+	OpNop = 0x0
+
 	OpIConstM1 = 0x2
 	OpIConst0  = 0x3
 	OpIConst1  = 0x4
@@ -8,6 +10,7 @@ const (
 	OpIConst3  = 0x6
 	OpIConst4  = 0x7
 	OpIConst5  = 0x8
+	OpLDC      = 0x12
 	OpILoad    = 0x15
 	OpILoad0   = 0x1a
 	OpILoad1   = 0x1b
@@ -23,10 +26,15 @@ const (
 	OpIMul    = 0x68
 	OpIReturn = 0xAC
 
-	OpReturn = 0xB1
+	OpReturn    = 0xB1
+	OpGetStatic = 0xB2
+
+	OpInvokeVirtual = 0xB6
+	OpInvokeStatic  = 0xB8
+	OpInvokeDynamic = 0xBA
 
 	OpBiPush = 0x10
 	OpSiPush = 0x11
 
-	OpInvokeStatic = 0xB8
+	OpPatch = 0xff
 )

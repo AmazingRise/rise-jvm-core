@@ -1,6 +1,7 @@
 package jvm
 
 import (
+	"strings"
 	"wasm-jvm/entity"
 	"wasm-jvm/logger"
 )
@@ -11,6 +12,13 @@ func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
 	// TODO: Some check, e.g. Abstract method should not be executed
 	// Create frame
 	frame := &Frame{}
+	// If it is a patched method
+	if method.This == nil {
+		// This is a patched method
+		frame.Stack = v.rt.Run(method.Name, args...)
+		frame.State = FrameExit
+		return frame
+	}
 	// Load Text
 	for _, attr := range method.Attrs {
 		// fmt.Printf("%02X ", attr.Text)
@@ -19,7 +27,6 @@ func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
 			break
 		}
 	}
-	//logger.Infoln(thread.Text)
 	// Load arguments
 	frame.Locals = make([]interface{}, frame.MaxLocals)
 	n := len(args)
@@ -27,22 +34,50 @@ func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
 		frame.Locals[i] = args[i]
 	}
 	frame.This = method.This
+	frame.MethodName = method.Name
 
-	// Append to threads
-	//v. = append(v.frame, frame)
 	return frame
 }
 
 func (v *VM) LocateMethod(className string, methodName string) *entity.Method {
 	// TODO: Exception process
 	// TODO: Overwrite
-	return v.classes[className].Methods[methodName]
+	// If it is runtime call
+	if strings.HasPrefix(className, "java/") {
+		if v.rt.Find(className, methodName) {
+			return v.CreateDummyMethod(className, methodName)
+		} else {
+			logger.Errorf("unsupported runtime call: %s::%s", className, methodName)
+		}
+	}
+	class, ok := v.classes[className]
+	if !ok {
+		logger.Errorln("unable to locate class", className)
+	}
+	method, ok := class.Methods[methodName]
+	if !ok {
+		logger.Errorf("unable to locate method %s in class %s.\n", className, methodName)
+	}
+	return method
 }
 
 func (v *VM) InvokeStaticMethod(method *entity.Method, args ...interface{}) *Frame {
 	// TODO: Some check
 	// TODO: Overwrite
 	return v.invoke(method, args...)
+}
+
+func (v *VM) CreateDummyMethod(className string, methodName string) *entity.Method {
+	return &entity.Method{
+		Name:  className + "." + methodName,
+		Flags: 0,
+		Desc:  "",
+		Attrs: []entity.Attribute{{
+			Name:  "Code",
+			Bytes: []byte{0xFF, 0xAC},
+		}},
+		This: nil,
+	}
 }
 
 // bootstrap find main and put the frame into a new thread

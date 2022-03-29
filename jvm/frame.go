@@ -22,6 +22,7 @@ const (
 	FrameReady = 0
 	FrameExit  = 1
 	FramePush  = 2
+	FramePatch = 3
 )
 
 // Exec execute the frame
@@ -31,6 +32,12 @@ func (f *Frame) Exec() []interface{} {
 		opcode := f.Text[f.PC]
 		//fmt.Printf("0x%X", opcode)
 		switch opcode {
+		case OpNop:
+			break
+		case OpLDC:
+			idx := f.Text[f.PC+1]
+			f.Stack = append(f.Stack, f.This.Constants.GetStr(uint16(idx)))
+			f.PC++
 		case OpILoad:
 			idx := f.Text[f.PC+1]
 			f.Stack = append(f.Stack, f.Locals[idx])
@@ -95,11 +102,30 @@ func (f *Frame) Exec() []interface{} {
 			short := int(f.Text[f.PC+1])<<8 + int(f.Text[f.PC+2])
 			f.Stack = append(f.Stack, short)
 			f.PC += 2
+		case OpGetStatic:
+			/*idx := uint16(f.Text[f.PC+1])<<8 + uint16(f.Text[f.PC+2])
+			f.State = FramePush
+			f.PC += 3
+			class, name, desc := f.This.Constants.GetFieldRef(idx)*/
+			// do nothing
+			f.PC += 2
+			break
 		case OpInvokeStatic:
 			// Invoke a static method
 			idx := uint16(f.Text[f.PC+1])<<8 + uint16(f.Text[f.PC+2])
 			f.State = FramePush
-			f.PC += 3
+			f.PC += 3 // directly return, so add 3
+			return []interface{}{idx}
+		case OpInvokeDynamic:
+			// Invoke a dynamic method
+			idx := uint16(f.Text[f.PC+1])<<8 + uint16(f.Text[f.PC+2])
+			f.State = FramePush
+			f.PC += 3 // directly return, so add 3
+			return []interface{}{idx}
+		case OpInvokeVirtual:
+			idx := uint16(f.Text[f.PC+1])<<8 + uint16(f.Text[f.PC+2])
+			f.State = FramePush
+			f.PC += 3 // directly return, so add 3
 			return []interface{}{idx}
 		case OpReturn:
 			f.State = FrameExit

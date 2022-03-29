@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"os"
 	"wasm-jvm/jvm"
 	"wasm-jvm/loader"
@@ -8,7 +9,8 @@ import (
 )
 
 func main() {
-	logger.InitLogger(os.Stdout, os.Stdout, os.Stdout)
+	//logger.InitLogger(os.Stdout, os.Stdout, os.Stdout)
+	logger.InitLogger(ioutil.Discard, ioutil.Discard, ioutil.Discard)
 
 	file, _ := os.Open("./Add.class")
 	l := loader.CreateLoader()

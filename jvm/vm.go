@@ -7,11 +7,13 @@ import (
 type VM struct {
 	pool    *ThreadPool
 	classes map[string]*entity.Class
+	rt      *Rt
 }
 
 func CreateVM() *VM {
 	vm := &VM{
 		classes: make(map[string]*entity.Class),
+		rt:      CreateRt(),
 	}
 	vm.pool = vm.CreateThreadPool()
 

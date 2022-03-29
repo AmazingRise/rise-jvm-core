@@ -9,7 +9,7 @@ import (
 var debugLogger, warnLogger, errLogger *log.Logger
 
 func InitLogger(debug, warn, error io.Writer) {
-	debugLogger = log.New(debug, "[INFO] ", log.LstdFlags)
+	debugLogger = log.New(debug, "[DEBUG] ", log.LstdFlags)
 	warnLogger = log.New(debug, "[WARN] ", log.LstdFlags)
 	errLogger = log.New(debug, "[ERROR] ", log.LstdFlags)
 }
