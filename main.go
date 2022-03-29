@@ -18,7 +18,5 @@ func main() {
 
 	vm := jvm.CreateVM()
 	vm.AppendClass(class)
-	//add := vm.LocateMethod("Add", "Calc")
-	//vm.InvokeStaticMethod(add, 1, 2)
 	vm.Boot()
 }

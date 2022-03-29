@@ -27,4 +27,6 @@ const (
 
 	OpBiPush = 0x10
 	OpSiPush = 0x11
+
+	OpInvokeStatic = 0xB8
 )

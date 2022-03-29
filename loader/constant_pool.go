@@ -35,6 +35,7 @@ func (l *Loader) readConstantPool(count uint16) {
 				NameTypeIdx: l.u2(),
 			}
 			pool.MethodRefConst[i] = ref
+			logger.Infof("Method ref class #%d, name and type #%d", ref.ClassIdx, ref.NameTypeIdx)
 		case entity.ConstantInterfacemethodref:
 			ref := entity.Ref{
 				ClassIdx:    l.u2(),
@@ -60,9 +61,11 @@ func (l *Loader) readConstantPool(count uint16) {
 			l.readBytes(4) // high bytes
 			l.readBytes(4) // low bytes
 		case entity.ConstantNameandtype:
-			nameIdx := l.u2() // name_index
-			descIdx := l.u2() // descriptor_index
-			logger.Infof("Name and types: name_index #%d, desc_index #%d", nameIdx, descIdx)
+			pool.NameTypeConst[i] = entity.NameType{
+				NameIdx: l.u2(),
+				DescIdx: l.u2(),
+			}
+			logger.Infof("Name and types: name_index #%d, desc_index #%d", pool.NameTypeConst[i].NameIdx, pool.NameTypeConst[i].DescIdx)
 		case entity.ConstantUtf8:
 			length := l.u2() // length
 			stringConst := l.readBytes(int(length))

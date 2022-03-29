@@ -12,8 +12,8 @@ type VM struct {
 func CreateVM() *VM {
 	vm := &VM{
 		classes: make(map[string]*entity.Class),
-		pool:    CreateThreadPool(),
 	}
+	vm.pool = vm.CreateThreadPool()
 
 	return vm
 }

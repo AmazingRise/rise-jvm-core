@@ -11,14 +11,17 @@ type Frame struct {
 	Stack  []interface{}
 	Locals []interface{}
 	//Ins    [][]byte
-	This       *entity.Class
+
 	MethodName string
 	State      int
+
+	This *entity.Class
 }
 
 const (
 	FrameReady = 0
 	FrameExit  = 1
+	FramePush  = 2
 )
 
 // Exec execute the frame
@@ -26,6 +29,7 @@ func (f *Frame) Exec() []interface{} {
 	n := len(f.Text)
 	if int(f.PC) < n {
 		opcode := f.Text[f.PC]
+		//fmt.Printf("0x%X", opcode)
 		switch opcode {
 		case OpILoad:
 			idx := f.Text[f.PC+1]
@@ -66,6 +70,7 @@ func (f *Frame) Exec() []interface{} {
 			f.Stack[0] = result
 		case OpIReturn:
 			f.State = FrameExit
+			f.PC++
 			return f.Stack
 		case OpIConst1:
 			fallthrough
@@ -90,6 +95,12 @@ func (f *Frame) Exec() []interface{} {
 			short := int(f.Text[f.PC+1])<<8 + int(f.Text[f.PC+2])
 			f.Stack = append(f.Stack, short)
 			f.PC += 2
+		case OpInvokeStatic:
+			// Invoke a static method
+			idx := uint16(f.Text[f.PC+1])<<8 + uint16(f.Text[f.PC+2])
+			f.State = FramePush
+			f.PC += 3
+			return []interface{}{idx}
 		case OpReturn:
 			f.State = FrameExit
 		default:

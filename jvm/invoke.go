@@ -24,9 +24,8 @@ func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
 	frame.Locals = make([]interface{}, frame.MaxLocals)
 	n := len(args)
 	for i := n - 1; i >= 0; i-- {
-		frame.Locals = append(frame.Locals, args[i])
+		frame.Locals[i] = args[i]
 	}
-
 	frame.This = method.This
 
 	// Append to threads
@@ -36,12 +35,14 @@ func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
 
 func (v *VM) LocateMethod(className string, methodName string) *entity.Method {
 	// TODO: Exception process
+	// TODO: Overwrite
 	return v.classes[className].Methods[methodName]
 }
 
-func (v *VM) InvokeStaticMethod(method *entity.Method, args ...interface{}) {
+func (v *VM) InvokeStaticMethod(method *entity.Method, args ...interface{}) *Frame {
 	// TODO: Some check
-	v.invoke(method, args...)
+	// TODO: Overwrite
+	return v.invoke(method, args...)
 }
 
 // bootstrap find main and put the frame into a new thread
