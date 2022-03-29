@@ -5,31 +5,33 @@ import (
 	"wasm-jvm/logger"
 )
 
-// invoke a method, create a thread, and put it into v.threads
-// execution is done by Scheduler
-func (v *VM) invoke(method *entity.Method, args ...interface{}) {
+// invoke create a frame
+func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
 	logger.Infoln("Calling method", method.Name, "with args:", args)
 	// TODO: Some check, e.g. Abstract method should not be executed
-	// Create thread
-	thread := &Thread{}
+	// Create frame
+	frame := &Frame{}
 	// Load Text
 	for _, attr := range method.Attrs {
 		// fmt.Printf("%02X ", attr.Text)
 		if attr.Name == "Code" {
-			thread.ByteCode = *Load(attr.Bytes)
+			frame.ByteCode = *Load(attr.Bytes)
 			break
 		}
 	}
 	//logger.Infoln(thread.Text)
 	// Load arguments
-	thread.Locals = make([]interface{}, thread.MaxLocals)
+	frame.Locals = make([]interface{}, frame.MaxLocals)
 	n := len(args)
 	for i := n - 1; i >= 0; i-- {
-		thread.Locals = append(thread.Locals, args[i])
+		frame.Locals = append(frame.Locals, args[i])
 	}
 
+	frame.This = method.This
+
 	// Append to threads
-	v.threads = append(v.threads, thread)
+	//v. = append(v.frame, frame)
+	return frame
 }
 
 func (v *VM) LocateMethod(className string, methodName string) *entity.Method {
@@ -42,13 +44,15 @@ func (v *VM) InvokeStaticMethod(method *entity.Method, args ...interface{}) {
 	v.invoke(method, args...)
 }
 
-func (v *VM) InvokeMain() {
+// bootstrap find main and put the frame into a new thread
+func (v *VM) bootstrap() {
 	// search for a public class with a static main method
 	main := v.findMain()
 	if main == nil {
 		logger.Errorln("classes does not contain a main")
 	}
-	v.invoke(main)
+	frame := v.invoke(main)
+	v.pool.CreateThread(frame)
 }
 
 func (v *VM) findMain() *entity.Method {

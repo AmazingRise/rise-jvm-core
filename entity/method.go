@@ -5,6 +5,7 @@ type Method struct {
 	Flags uint16
 	Desc  string
 	Attrs []Attribute
+	This  *Class
 }
 
 func (m *Method) IsPublic() bool {

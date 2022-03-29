@@ -23,6 +23,8 @@ const (
 	OpIMul    = 0x68
 	OpIReturn = 0xAC
 
+	OpReturn = 0xB1
+
 	OpBiPush = 0x10
 	OpSiPush = 0x11
 )

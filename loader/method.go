@@ -31,6 +31,8 @@ func (l *Loader) readMethods(count uint16) {
 		logger.Infoln("Method descriptor:", method.Desc)
 		aCount := l.u2() // attribute count
 		method.Attrs = l.ReadAttributes(aCount)
+		method.This = c
+		// TODO: Override
 		c.Methods[method.Name] = method
 	}
 }
