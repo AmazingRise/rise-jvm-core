@@ -1,9 +1,9 @@
 package jvm
 
 import (
+	"rise-jvm-core/entity"
+	"rise-jvm-core/logger"
 	"strings"
-	"wasm-jvm/entity"
-	"wasm-jvm/logger"
 )
 
 // invoke create a frame

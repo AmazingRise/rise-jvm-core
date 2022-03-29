@@ -3,9 +3,9 @@ package loader
 import (
 	"bytes"
 	"io"
-	"wasm-jvm/entity"
-	"wasm-jvm/logger"
-	"wasm-jvm/utils"
+	"rise-jvm-core/entity"
+	"rise-jvm-core/logger"
+	"rise-jvm-core/utils"
 )
 
 type Loader struct {

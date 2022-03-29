@@ -3,16 +3,19 @@ package main
 import (
 	"io/ioutil"
 	"os"
-	"wasm-jvm/jvm"
-	"wasm-jvm/loader"
-	"wasm-jvm/logger"
+	"rise-jvm-core/jvm"
+	"rise-jvm-core/loader"
+	"rise-jvm-core/logger"
 )
 
 func main() {
 	//logger.InitLogger(os.Stdout, os.Stdout, os.Stdout)
-	logger.InitLogger(ioutil.Discard, ioutil.Discard, ioutil.Discard)
+	logger.InitLogger(ioutil.Discard, ioutil.Discard, os.Stdout)
 
-	file, _ := os.Open("./Add.class")
+	if len(os.Args) <= 1 {
+		logger.Errorln("no input file")
+	}
+	file, _ := os.Open(os.Args[1])
 	l := loader.CreateLoader()
 
 	class := l.LoadClass(file)

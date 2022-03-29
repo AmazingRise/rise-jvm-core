@@ -1,8 +1,8 @@
 package loader
 
 import (
-	"wasm-jvm/entity"
-	"wasm-jvm/logger"
+	"rise-jvm-core/entity"
+	"rise-jvm-core/logger"
 )
 
 func (l *Loader) readConstantPool(count uint16) {

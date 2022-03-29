@@ -10,8 +10,8 @@ var debugLogger, warnLogger, errLogger *log.Logger
 
 func InitLogger(debug, warn, error io.Writer) {
 	debugLogger = log.New(debug, "[DEBUG] ", log.LstdFlags)
-	warnLogger = log.New(debug, "[WARN] ", log.LstdFlags)
-	errLogger = log.New(debug, "[ERROR] ", log.LstdFlags)
+	warnLogger = log.New(warn, "[WARN] ", log.LstdFlags)
+	errLogger = log.New(error, "[ERROR] ", log.LstdFlags)
 }
 
 func Infoln(v ...interface{}) {

@@ -11,8 +11,6 @@ public class Add {
         return;
     }
 
-    //private static String hello = "Hello, ";
-
     public static int Calc(int a, int b, int c) {
         return (a + b) * c;
     }

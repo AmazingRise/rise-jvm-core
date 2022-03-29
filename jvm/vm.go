@@ -1,7 +1,7 @@
 package jvm
 
 import (
-	"wasm-jvm/entity"
+	"rise-jvm-core/entity"
 )
 
 type VM struct {

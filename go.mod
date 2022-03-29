@@ -1,3 +1,3 @@
-module wasm-jvm
+module rise-jvm-core
 
 go 1.17

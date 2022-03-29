@@ -2,8 +2,8 @@ package jvm
 
 import (
 	"bytes"
-	"wasm-jvm/entity"
-	"wasm-jvm/utils"
+	"rise-jvm-core/entity"
+	"rise-jvm-core/utils"
 )
 
 /*

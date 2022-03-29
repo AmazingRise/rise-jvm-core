@@ -1,7 +1,7 @@
 package jvm
 
 import (
-	"wasm-jvm/logger"
+	"rise-jvm-core/logger"
 )
 
 type ThreadPool struct {

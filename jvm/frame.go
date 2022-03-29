@@ -1,8 +1,8 @@
 package jvm
 
 import (
-	"wasm-jvm/entity"
-	"wasm-jvm/logger"
+	"rise-jvm-core/entity"
+	"rise-jvm-core/logger"
 )
 
 type Frame struct {

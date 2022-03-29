@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
-	"wasm-jvm/logger"
+	"rise-jvm-core/logger"
 )
 
 type Reader struct {
