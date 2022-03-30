@@ -1,6 +1,9 @@
-package jvm
+package rt
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+)
 
 // Mini Runtime
 
@@ -8,16 +11,16 @@ type Rt struct {
 	MethodRef map[string]func(args ...interface{}) []interface{}
 }
 
-func CreateRt() *Rt {
+func CreateRt(out io.Writer, in io.Reader) *Rt {
 	rt := &Rt{
 		MethodRef: make(map[string]func(args ...interface{}) []interface{}),
 	}
 	rt.MethodRef["java/io/PrintStream.println"] = func(args ...interface{}) []interface{} {
-		fmt.Println(args...)
+		_, _ = fmt.Fprintln(out, args...)
 		return nil
 	}
 	rt.MethodRef["java/io/PrintStream.print"] = func(args ...interface{}) []interface{} {
-		fmt.Print(args...)
+		_, _ = fmt.Fprint(out, args...)
 		return nil
 	}
 	return rt

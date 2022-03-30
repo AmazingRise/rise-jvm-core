@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"io/ioutil"
 	"os"
 	"rise-jvm-core/jvm"
@@ -9,19 +10,20 @@ import (
 )
 
 func main() {
-	//logger.InitLogger(os.Stdout, os.Stdout, os.Stdout)
-	logger.InitLogger(ioutil.Discard, ioutil.Discard, os.Stdout)
-
 	if len(os.Args) <= 1 {
 		logger.Errorln("no input file")
 	}
-	file, _ := os.Open(os.Args[1])
+	LoadAndRun(os.Args[1]+".class", os.Stdout, nil)
+}
+
+func LoadAndRun(path string, out io.Writer, in io.Reader) {
+	logger.InitLogger(ioutil.Discard, ioutil.Discard, os.Stdout)
+	file, _ := os.Open(path)
 	l := loader.CreateLoader()
 
 	class := l.LoadClass(file)
-	logger.Infoln("Class name: ", class.This, "@", class.Super)
 
-	vm := jvm.CreateVM()
+	vm := jvm.CreateVM(out, in)
 	vm.AppendClass(class)
 	vm.Boot()
 }
