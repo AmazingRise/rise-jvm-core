@@ -1,24 +1,19 @@
 package jvm
 
 import (
+	"bytes"
 	"rise-jvm-core/entity"
 	"rise-jvm-core/logger"
+	"rise-jvm-core/utils"
 	"strings"
 )
 
 // invoke create a frame
 func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
-	logger.Infoln("Calling method", method.Name, "with args:", args)
-	// TODO: Some check, e.g. Abstract method should not be executed
-	// Create frame
 	frame := &Frame{}
 	// If it is a patched method
-	if method.This == nil {
-		// This is a patched method
-		frame.Stack = v.rt.Run(method.Name, args...)
-		frame.State = FrameExit
-		return frame
-	}
+	logger.Infoln("Calling method", method.Name, "with args:", args)
+	// TODO: Some check, e.g. Abstract method should not be executed
 	// Load Text
 	for _, attr := range method.Attrs {
 		// fmt.Printf("%02X ", attr.Text)
@@ -34,18 +29,19 @@ func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
 		frame.Locals[i] = args[i]
 	}
 	frame.This = method.This
-	frame.MethodName = method.Name
+	frame.MethodRef = method
 
 	return frame
 }
 
-func (v *VM) LocateMethod(className string, methodName string) *entity.Method {
+func (v *VM) LocateMethod(className string, methodName string, desc string) *entity.Method {
 	// TODO: Exception process
 	// TODO: Overwrite
 	// If it is runtime call
 	if strings.HasPrefix(className, "java/") {
-		if v.rt.Find(className, methodName) {
-			return v.CreateDummyMethod(className, methodName)
+		rtMtd := v.rt.LocateMethod(className, methodName, desc)
+		if rtMtd != nil {
+			return rtMtd
 		} else {
 			logger.Errorf("unsupported runtime call: %s::%s", className, methodName)
 		}
@@ -61,23 +57,38 @@ func (v *VM) LocateMethod(className string, methodName string) *entity.Method {
 	return method
 }
 
+func (v *VM) LocateClass(className string) *entity.Class {
+	if className == "java/lang/Object" {
+		return v.rt.Object
+	}
+	class, ok := v.classes[className]
+	if !ok {
+		if strings.HasPrefix(className, "java/") {
+			fake := v.rt.CreateFakeClass(className)
+			v.AppendClass(fake)
+		} else {
+			logger.Errorln("unable to locate class", className)
+		}
+	}
+	return class
+}
+
 func (v *VM) InvokeStaticMethod(method *entity.Method, args ...interface{}) *Frame {
 	// TODO: Some check
 	// TODO: Overwrite
 	return v.invoke(method, args...)
 }
 
-func (v *VM) CreateDummyMethod(className string, methodName string) *entity.Method {
-	return &entity.Method{
-		Name:  className + "." + methodName,
-		Flags: 0,
-		Desc:  "",
-		Attrs: []entity.Attribute{{
-			Name:  "Code",
-			Bytes: []byte{0xFF, 0xAC},
-		}},
-		This: nil,
-	}
+func (v *VM) InvokeRuntimeMethod(class string, method string, args ...interface{}) *Frame {
+	frame := &Frame{}
+	frame.Stack = v.rt.RunMethod(class+"."+method, args...)
+	frame.State = FrameExit
+	return frame
+}
+
+func (v *VM) InvokeVirtualMethod(method *entity.Method, args ...interface{}) *Frame {
+	frame := v.invoke(method, args...)
+	return frame
 }
 
 // bootstrap find main and put the frame into a new thread
@@ -99,4 +110,25 @@ func (v *VM) findMain() *entity.Method {
 		}
 	}
 	return nil
+}
+
+func Load(raw []byte) *entity.ByteCode {
+	code := &entity.ByteCode{}
+	r := utils.CreateReader(bytes.NewReader(raw))
+	code.MaxStack = r.U2()
+	code.MaxLocals = r.U2()
+	codeLen := r.U4()
+	code.Text = r.ReadBytes(int(codeLen))
+	exLen := r.U2()
+	var i uint16
+	for i = 0; i < exLen; i++ {
+		code.ExceptionTable = append(code.ExceptionTable, entity.Exception{
+			StartPc:   r.U2(),
+			EndPc:     r.U2(),
+			HandlerPc: r.U2(),
+			CatchType: r.U2(),
+		})
+	}
+	// TODO: Read attributes
+	return code
 }

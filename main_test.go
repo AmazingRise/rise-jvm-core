@@ -26,6 +26,14 @@ func TestAdd(t *testing.T) {
 	Verify(t, "demo/Add.class", "Hello world!\n(100+200)*300=90000\n")
 }
 
+func TestRecursive(t *testing.T) {
+	Verify(t, "demo/Recursive.class", "Hello world!\n(100+200)*300=90000\n")
+}
+
+func TestObj(t *testing.T) {
+	Verify(t, "demo/Obj.class", "1\n")
+}
+
 func Verify(t *testing.T, path string, out string) {
 	buf := bytes.NewBufferString("")
 	LoadAndRun(path, buf, nil)

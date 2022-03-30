@@ -11,16 +11,32 @@ const (
 	OpIConst4  = 0x7
 	OpIConst5  = 0x8
 	OpLDC      = 0x12
-	OpILoad    = 0x15
-	OpILoad0   = 0x1a
-	OpILoad1   = 0x1b
-	OpILoad2   = 0x1c
-	OpILoad3   = 0x1d
-	OpIStore   = 0x36
-	OpIStore0  = 0x3b
-	OpIStore1  = 0x3c
-	OpIStore2  = 0x3d
-	OpIStore3  = 0x3e
+
+	OpILoad  = 0x15
+	OpILoad0 = 0x1a
+	OpILoad1 = 0x1b
+	OpILoad2 = 0x1c
+	OpILoad3 = 0x1d
+
+	OpALoad  = 0x25
+	OpALoad0 = 0x2a
+	OpALoad1 = 0x2b
+	OpALoad2 = 0x2c
+	OpALoad3 = 0x2d
+
+	OpIStore  = 0x36
+	OpIStore0 = 0x3b
+	OpIStore1 = 0x3c
+	OpIStore2 = 0x3d
+	OpIStore3 = 0x3e
+
+	OpAStore  = 0x3A
+	OpAStore0 = 0x4b
+	OpAStore1 = 0x4c
+	OpAStore2 = 0x4d
+	OpAStore3 = 0x4e
+
+	OpDup = 0x59
 
 	OpIAdd    = 0x60
 	OpIMul    = 0x68
@@ -28,10 +44,15 @@ const (
 
 	OpReturn    = 0xB1
 	OpGetStatic = 0xB2
+	OpGetField  = 0xB4
+	OpPutField  = 0xB5
 
 	OpInvokeVirtual = 0xB6
+	OpInvokeSpecial = 0xB7
 	OpInvokeStatic  = 0xB8
 	OpInvokeDynamic = 0xBA
+
+	OpNew = 0xBB
 
 	OpBiPush = 0x10
 	OpSiPush = 0x11

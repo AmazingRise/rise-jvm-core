@@ -17,7 +17,7 @@ func main() {
 }
 
 func LoadAndRun(path string, out io.Writer, in io.Reader) {
-	logger.InitLogger(ioutil.Discard, ioutil.Discard, os.Stdout)
+	logger.InitLogger(os.Stdout, ioutil.Discard, os.Stdout)
 	file, _ := os.Open(path)
 	l := loader.CreateLoader()
 
