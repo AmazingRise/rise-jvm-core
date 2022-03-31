@@ -11,7 +11,7 @@ import (
 
 func main() {
 	if len(os.Args) <= 1 {
-		logger.Errorln("no input file")
+		panic("no input file")
 	}
 	LoadAndRun(os.Args[1]+".class", os.Stdout, nil, true)
 }
