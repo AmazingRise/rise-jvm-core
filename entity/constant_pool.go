@@ -20,7 +20,8 @@ const (
 )
 
 type ConstPool struct {
-	Utf8Const  map[uint16]string
+	Consts map[uint16]interface{}
+	/*Utf8Const  map[uint16]string
 	ClassConst map[uint16]uint16
 
 	MethodRefConst          map[uint16]Ref
@@ -33,7 +34,7 @@ type ConstPool struct {
 	LongConst   map[uint16]int64
 	DoubleConst map[uint16]float64
 
-	NameTypeConst map[uint16]NameType
+	NameTypeConst map[uint16]NameType*/
 }
 
 type Ref struct {
@@ -49,18 +50,18 @@ type NameType struct {
 
 // GetUtf8Const get an utf8 constant from constant pool by its index
 func (p *ConstPool) GetUtf8Const(idx uint16) string {
-	return p.Utf8Const[idx]
+	return p.Consts[idx].(string)
 }
 
 // GetClassName get a class name from constant pool by its index
 func (p *ConstPool) GetClassName(idx uint16) string {
-	nameIdx := p.ClassConst[idx]
+	nameIdx := p.Consts[idx].(uint16)
 	return p.GetUtf8Const(nameIdx)
 }
 
 // GetMethodRef get the class, name and description of a method, from its index in constant pool
 func (p *ConstPool) GetMethodRef(idx uint16) (class string, name string, desc string) {
-	methodRef := p.MethodRefConst[idx]
+	methodRef := p.Consts[idx].(Ref)
 	class = p.GetClassName(methodRef.ClassIdx)
 	name, desc = p.GetNameType(methodRef.NameTypeIdx)
 	return
@@ -68,7 +69,7 @@ func (p *ConstPool) GetMethodRef(idx uint16) (class string, name string, desc st
 
 // GetFieldRef get the class, name and description of a field, from its index in constant pool
 func (p *ConstPool) GetFieldRef(idx uint16) (class string, name string, desc string) {
-	methodRef := p.FieldRefConst[idx]
+	methodRef := p.Consts[idx].(Ref)
 	class = p.GetClassName(methodRef.ClassIdx)
 	name, desc = p.GetNameType(methodRef.NameTypeIdx)
 	return
@@ -76,35 +77,19 @@ func (p *ConstPool) GetFieldRef(idx uint16) (class string, name string, desc str
 
 // GetInterfaceMethodRef get the class, name and description of an interface method, from its index in constant pool
 func (p *ConstPool) GetInterfaceMethodRef(idx uint16) (class string, name string, desc string) {
-	methodRef := p.InterfaceMethodRefConst[idx]
+	methodRef := p.Consts[idx].(Ref)
 	class = p.GetClassName(methodRef.ClassIdx)
 	name, desc = p.GetNameType(methodRef.NameTypeIdx)
 	return
 }
 
 func (p *ConstPool) GetNameType(idx uint16) (name string, desc string) {
-	nameType := p.NameTypeConst[idx]
+	nameType := p.Consts[idx].(NameType)
 	name = p.GetUtf8Const(nameType.NameIdx)
 	desc = p.GetUtf8Const(nameType.DescIdx)
 	return
 }
 
-func (p *ConstPool) GetInt(idx uint16) int {
-	return p.IntConst[idx]
-}
-
-func (p *ConstPool) GetStr(idx uint16) string {
-	return p.GetUtf8Const(p.StrConst[idx])
-}
-
-func (p *ConstPool) GetLong(idx uint16) int64 {
-	return p.LongConst[idx]
-}
-
-func (p *ConstPool) GetFloat(idx uint16) float32 {
-	return p.FloatConst[idx]
-}
-
-func (p *ConstPool) GetDouble(idx uint16) float64 {
-	return p.DoubleConst[idx]
+func (p *ConstPool) GetConst(idx uint16) interface{} {
+	return p.Consts[idx]
 }

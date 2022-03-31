@@ -18,7 +18,7 @@ func (v *VM) Exec(f *Frame) []interface{} {
 			break
 		case OpLDC:
 			idx := f.Text[f.PC+1]
-			f.Stack = append(f.Stack, f.This.Constants.GetStr(uint16(idx)))
+			f.Stack = append(f.Stack, f.This.Constants.GetConst(uint16(idx)))
 			f.PC++
 		case OpALoad:
 			fallthrough

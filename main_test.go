@@ -38,11 +38,16 @@ func TestFor(t *testing.T) {
 	Verify(t, "demo/For.class", "12345")
 }
 
+func TestMemoryLeak(t *testing.T) {
+	Verify(t, "demo/MemoryLeak.class", "")
+}
+
 func TestAll(t *testing.T) {
 	t.Run("Add", TestAdd)
 	t.Run("Recursive", TestRecursive)
 	t.Run("Object", TestObj)
 	t.Run("For", TestFor)
+	//t.Run("Memory Leak", TestMemoryLeak)
 }
 
 func Verify(t *testing.T, path string, out string) {
