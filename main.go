@@ -20,7 +20,7 @@ func LoadAndRun(path string, out io.Writer, in io.Reader, silent bool) {
 	if silent {
 		logger.InitLogger(ioutil.Discard, ioutil.Discard, os.Stdout)
 	} else {
-		logger.InitLogger(os.Stdout, ioutil.Discard, os.Stdout)
+		logger.InitLogger(os.Stdout, os.Stdout, os.Stdout)
 	}
 
 	file, _ := os.Open(path)

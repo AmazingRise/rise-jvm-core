@@ -57,5 +57,15 @@ const (
 	OpBiPush = 0x10
 	OpSiPush = 0x11
 
+	OpIfICmpEq = 0x9f
+	OpIfICmpNe = 0xa0
+	OpIfICmpLt = 0xa1
+	OpIfICmpGe = 0xa2
+	OpIfICmpGt = 0xa3
+	OpIfICmpLe = 0xa4
+	OpGoto     = 0xa7
+
+	OpIInc = 0x84
+
 	OpPatch = 0xff
 )

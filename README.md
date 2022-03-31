@@ -7,8 +7,11 @@ This is the core of Rise JVM.
 
 Rise JVM is a Java Virtual Machine based on WASM, written in Go.
 
-## ✨Quick Start
+Tested under:
+- Ubuntu 20.04
+- OpenJDK javac 11.0.13
 
+## ✨Quick Start
 
 1. Build it.
 ```bash

@@ -96,7 +96,7 @@ func (v *VM) Exec(f *Frame) []interface{} {
 		case OpIConst0:
 			fallthrough
 		case OpIConstM1:
-			f.Stack = append(f.Stack, opcode-3)
+			f.Stack = append(f.Stack, int(opcode-3))
 		case OpBiPush:
 			// Set it to int
 			f.Stack = append(f.Stack, int(f.Text[f.PC+1]))
@@ -161,6 +161,37 @@ func (v *VM) Exec(f *Frame) []interface{} {
 			class := v.LocateClass(className)
 			obj := entity.CreateObject(class)
 			f.Stack = append(f.Stack, obj)
+			f.PC += 2
+		case OpIfICmpEq:
+			f.condJmp(f.Stack[len(f.Stack)-2].(int) == f.Stack[len(f.Stack)-1].(int))
+			return nil
+		case OpIfICmpNe:
+			f.condJmp(f.Stack[len(f.Stack)-2].(int) != f.Stack[len(f.Stack)-1].(int))
+			return nil
+		case OpIfICmpLt:
+			f.condJmp(f.Stack[len(f.Stack)-2].(int) < f.Stack[len(f.Stack)-1].(int))
+			return nil
+		case OpIfICmpGe:
+			f.condJmp(f.Stack[len(f.Stack)-2].(int) >= f.Stack[len(f.Stack)-1].(int))
+			return nil
+		case OpIfICmpGt:
+			f.condJmp(f.Stack[len(f.Stack)-2].(int) > f.Stack[len(f.Stack)-1].(int))
+			return nil
+		case OpIfICmpLe:
+			f.condJmp(f.Stack[len(f.Stack)-2].(int) <= f.Stack[len(f.Stack)-1].(int))
+			return nil
+		case OpGoto:
+			offset := int16(f.Text[f.PC+1])<<8 + int16(f.Text[f.PC+2])
+			if offset < 0 {
+				f.PC -= uint32(-offset)
+			} else {
+				f.PC += uint32(offset)
+			}
+			return nil
+		case OpIInc:
+			idx := int(f.Text[f.PC+1])
+			inc := int(f.Text[f.PC+2])
+			f.Locals[idx] = f.Locals[idx].(int) + inc
 			f.PC += 2
 		case OpReturn:
 			f.State = FrameExit

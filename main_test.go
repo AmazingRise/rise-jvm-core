@@ -34,10 +34,15 @@ func TestObj(t *testing.T) {
 	Verify(t, "demo/Obj.class", "1\n")
 }
 
+func TestFor(t *testing.T) {
+	Verify(t, "demo/For.class", "12345")
+}
+
 func TestAll(t *testing.T) {
 	t.Run("Add", TestAdd)
 	t.Run("Recursive", TestRecursive)
 	t.Run("Object", TestObj)
+	t.Run("For", TestFor)
 }
 
 func Verify(t *testing.T, path string, out string) {

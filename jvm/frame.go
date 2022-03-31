@@ -22,3 +22,18 @@ const (
 	FrameExit  = 1
 	FramePush  = 2
 )
+
+func (f *Frame) condJmp(cond bool) {
+	if cond {
+		offset := int16(f.Text[f.PC+1])<<8 + int16(f.Text[f.PC+2])
+		if offset < 0 {
+			f.PC -= uint32(-offset)
+		} else {
+			f.PC += uint32(offset)
+		}
+		//f.PC = uint32(f.Text[f.PC+1])<<8 + uint32(f.Text[f.PC+2])
+	} else {
+		f.PC += 3
+	}
+	f.Stack = f.Stack[:len(f.Stack)-2]
+}
