@@ -7,24 +7,44 @@ This is the core of Rise JVM.
 
 Rise JVM is a Java Virtual Machine based on WASM, written in Go.
 
-## Structure
+## ✨Quick Start
+
+
+1. Build it.
+```bash
+go build .
+```
+2. Pick a class from `demo` and run it!
+```bash
+./rise-jvm-core demo/Add
+```
+
+**NOTE**: the suffix `.class` should be emitted.
+
+## 🎄Structure
 
 Project structure:
 
 ```
 .
-├── Add.class  // Demo Java Class
-├── Add.java   // Demo Java Source Code
 ├── LICENSE
-├── README.md  // You're here :)
-├── entity     // Code: Entities, definition of structures
+├── README.md
+├── demo
+├── entity
 ├── go.mod
-├── jvm        // Code: Virtual Machine
-├── loader     // Code: Class Loader
-├── logger     // Code: Logger
-├── main.go    // Code: Entrance
-└── utils      // Code: Utilities
+├── go.sum
+├── jvm
+├── loader
+├── logger
+├── main.go
+├── main_test.go
+├── rt
+└── utils
 ```
+
+### `demo`
+
+Demo Java classes and their source code.
 
 ### `loader`
 
@@ -37,12 +57,16 @@ Other things like deserialization is not included.
 
 ### `jvm`
 
-Code of JVM.
+VM and byte code execution engine.
 
-## Acknowledgement
+### `logger`
+
+Global logger. It should be initialized.
+
+## 👏Acknowledgement
 
 [zserge/tojvm](https://github.com/zserge/tojvm). Some snippets in `loader` are from here. They are noted in comments.
 
-## License
+## 📜License
 
 This project is licensed under GPLv3.
