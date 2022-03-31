@@ -1,7 +1,6 @@
 package jvm
 
 import (
-	"rise-jvm-core/entity"
 	"rise-jvm-core/logger"
 	"strings"
 )
@@ -127,27 +126,21 @@ func (p *ThreadPool) Schedule() {
 			method := p.vm.LocateMethod(class, name, desc)
 
 			paramCount := getParamCount(desc)
-			if !(method.IsStatic() || method.IsFinal()) {
+			var params []interface{}
+			if !method.IsStatic() {
 				paramCount++
 			}
-			params := frame.Stack[len(frame.Stack)-paramCount:]
-
+			params = frame.Stack[len(frame.Stack)-paramCount:]
+			frame.Stack = frame.Stack[:len(frame.Stack)-paramCount]
 			var newFrame *Frame
 			// If method's attr is nil, then it is a runtime method.
 			if method.Attrs == nil {
-				newFrame = p.vm.InvokeRuntimeMethod(class, name, params...)
-			} else if method.IsStatic() {
-				newFrame = p.vm.InvokeStaticMethod(method, params...)
-			} else if method.IsFinal() {
-				newFrame = p.vm.InvokeStaticMethod(method, params...)
+				newFrame = p.vm.InvokeRuntimeMethod(method, params...)
 			} else {
-				// It is a virtual method
-				_ = frame.Stack[0].(*entity.Object)
-				newFrame = p.vm.InvokeStaticMethod(method, params...)
+				newFrame = p.vm.InvokeMethod(method, params...)
 			}
 			logger.Infof("Frame of thread %d pushed a new frame named %s::%s.", thread.Id, class, name)
-			// Pop
-			frame.Stack = frame.Stack[:len(frame.Stack)-paramCount]
+
 			// Push the frame
 			thread.FrameStack = append(thread.FrameStack, newFrame)
 		}

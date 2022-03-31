@@ -13,11 +13,16 @@ func main() {
 	if len(os.Args) <= 1 {
 		logger.Errorln("no input file")
 	}
-	LoadAndRun(os.Args[1]+".class", os.Stdout, nil)
+	LoadAndRun(os.Args[1]+".class", os.Stdout, nil, true)
 }
 
-func LoadAndRun(path string, out io.Writer, in io.Reader) {
-	logger.InitLogger(os.Stdout, ioutil.Discard, os.Stdout)
+func LoadAndRun(path string, out io.Writer, in io.Reader, silent bool) {
+	if silent {
+		logger.InitLogger(ioutil.Discard, ioutil.Discard, os.Stdout)
+	} else {
+		logger.InitLogger(os.Stdout, ioutil.Discard, os.Stdout)
+	}
+
 	file, _ := os.Open(path)
 	l := loader.CreateLoader()
 

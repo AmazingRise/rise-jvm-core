@@ -26,7 +26,7 @@ func CreateRt(out io.Writer, in io.Reader) *Rt {
 	rt.MethodRef["java/io/PrintStream.println"] = &RuntimeMethod{
 		Flags: entity.MethodFinal,
 		Fn: func(args ...interface{}) []interface{} {
-			_, _ = fmt.Fprintln(out, args...)
+			_, _ = fmt.Fprintln(out, args[1:]...)
 			return nil
 		},
 	}
@@ -34,7 +34,7 @@ func CreateRt(out io.Writer, in io.Reader) *Rt {
 	rt.MethodRef["java/io/PrintStream.print"] = &RuntimeMethod{
 		Flags: entity.MethodFinal,
 		Fn: func(args ...interface{}) []interface{} {
-			_, _ = fmt.Fprint(out, args...)
+			_, _ = fmt.Fprint(out, args[1:]...)
 			return nil
 		},
 	}

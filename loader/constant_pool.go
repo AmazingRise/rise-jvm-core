@@ -23,7 +23,7 @@ func (l *Loader) readConstantPool(count uint16) {
 	var i uint16
 	for i = 1; i <= count; i++ {
 		tag := l.u1()
-		logger.Infof("Constant #%d (tag: %d)", i, tag)
+		//logger.Infof("Constant #%d (tag: %d)", i, tag)
 		switch tag {
 		case entity.ConstantClass:
 			// Class info
@@ -35,7 +35,7 @@ func (l *Loader) readConstantPool(count uint16) {
 				NameTypeIdx: l.u2(),
 			}
 			pool.MethodRefConst[i] = ref
-			logger.Infof("Method ref class #%d, name and type #%d", ref.ClassIdx, ref.NameTypeIdx)
+			//logger.Infof("Method ref class #%d, name and type #%d", ref.ClassIdx, ref.NameTypeIdx)
 		case entity.ConstantInterfacemethodref:
 			ref := entity.Ref{
 				ClassIdx:    l.u2(),
@@ -65,12 +65,12 @@ func (l *Loader) readConstantPool(count uint16) {
 				NameIdx: l.u2(),
 				DescIdx: l.u2(),
 			}
-			logger.Infof("Name and types: name_index #%d, desc_index #%d", pool.NameTypeConst[i].NameIdx, pool.NameTypeConst[i].DescIdx)
+			//logger.Infof("Name and types: name_index #%d, desc_index #%d", pool.NameTypeConst[i].NameIdx, pool.NameTypeConst[i].DescIdx)
 		case entity.ConstantUtf8:
 			length := l.u2() // length
 			stringConst := l.readBytes(int(length))
 			pool.Utf8Const[i] = string(stringConst)
-			logger.Infof("#%d string(%d): %s", i, length, string(stringConst))
+			//logger.Infof("#%d string(%d): %s", i, length, string(stringConst))
 		case entity.CONSTANT_InvokeDynamic:
 			l.u2()
 			l.u2()

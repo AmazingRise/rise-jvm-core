@@ -34,9 +34,15 @@ func TestObj(t *testing.T) {
 	Verify(t, "demo/Obj.class", "1\n")
 }
 
+func TestAll(t *testing.T) {
+	t.Run("Add", TestAdd)
+	t.Run("Recursive", TestRecursive)
+	t.Run("Object", TestObj)
+}
+
 func Verify(t *testing.T, path string, out string) {
 	buf := bytes.NewBufferString("")
-	LoadAndRun(path, buf, nil)
+	LoadAndRun(path, buf, nil, false)
 	if out != buf.String() {
 		t.Errorf("excepted: %s\nbut: %s\n", out, buf.String())
 	}

@@ -73,15 +73,15 @@ func (v *VM) LocateClass(className string) *entity.Class {
 	return class
 }
 
-func (v *VM) InvokeStaticMethod(method *entity.Method, args ...interface{}) *Frame {
+func (v *VM) InvokeMethod(method *entity.Method, args ...interface{}) *Frame {
 	// TODO: Some check
 	// TODO: Overwrite
 	return v.invoke(method, args...)
 }
 
-func (v *VM) InvokeRuntimeMethod(class string, method string, args ...interface{}) *Frame {
+func (v *VM) InvokeRuntimeMethod(method *entity.Method, args ...interface{}) *Frame {
 	frame := &Frame{}
-	frame.Stack = v.rt.RunMethod(class+"."+method, args...)
+	frame.Stack = v.rt.RunMethod(method.This.This+"."+method.Name, args...)
 	frame.State = FrameExit
 	return frame
 }

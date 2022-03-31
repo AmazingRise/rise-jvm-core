@@ -2,7 +2,6 @@ package loader
 
 import (
 	"rise-jvm-core/entity"
-	"rise-jvm-core/logger"
 )
 
 /*
@@ -22,13 +21,13 @@ func (l *Loader) readMethods(count uint16) {
 	for i = 0; i < count; i++ {
 		method := &entity.Method{}
 		method.Flags = l.u2() // access flags
-		logger.Infof("Method flags: %b", method.Flags)
+		//logger.Infof("Method flags: %b", method.Flags)
 		nameIdx := l.u2() // name index
 		method.Name = c.Constants.GetUtf8Const(nameIdx)
-		logger.Infoln("Method Name: ", method.Name)
+		//logger.Infoln("Method Name: ", method.Name)
 		descIdx := l.u2() // descriptor index
 		method.Desc = c.Constants.GetUtf8Const(descIdx)
-		logger.Infoln("Method descriptor:", method.Desc)
+		//logger.Infoln("Method descriptor:", method.Desc)
 		aCount := l.u2() // attribute count
 		method.Attrs = l.ReadAttributes(aCount)
 		method.This = c
