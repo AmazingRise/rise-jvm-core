@@ -81,7 +81,7 @@ func (v *VM) InvokeMethod(method *entity.Method, args ...interface{}) *Frame {
 
 func (v *VM) InvokeRuntimeMethod(method *entity.Method, args ...interface{}) *Frame {
 	frame := &Frame{}
-	frame.Stack = v.rt.RunMethod(method.This.This+"."+method.Name, args...)
+	frame.Stack = v.rt.RunMethod(method.This.Name+"."+method.Name, args...)
 	frame.State = FrameExit
 	return frame
 }

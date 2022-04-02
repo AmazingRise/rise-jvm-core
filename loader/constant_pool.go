@@ -7,7 +7,7 @@ import (
 
 func (l *Loader) readConstantPool(count uint16) {
 	pool := entity.ConstPool{
-		Consts: make(map[uint16]interface{}),
+		Consts: make([]interface{}, count+1),
 	}
 
 	var i uint16

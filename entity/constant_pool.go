@@ -20,7 +20,7 @@ const (
 )
 
 type ConstPool struct {
-	Consts map[uint16]interface{}
+	Consts []interface{}
 	/*Utf8Const  map[uint16]string
 	ClassConst map[uint16]uint16
 

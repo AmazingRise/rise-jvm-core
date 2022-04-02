@@ -47,7 +47,7 @@ func CreateRt(out io.Writer, in io.Reader) *Rt {
 	}
 
 	rt.Object = &entity.Class{
-		This:      "java/lang/Object",
+		Name:      "java/lang/Object",
 		Methods:   nil,
 		Constants: nil,
 		Super:     "",
@@ -66,7 +66,7 @@ func (r *Rt) LocateMethod(class string, method string, desc string) *entity.Meth
 		Flags: rtMethod.Flags,
 		Desc:  desc,
 		Attrs: nil,
-		This:  &entity.Class{This: class},
+		This:  &entity.Class{Name: class},
 	}
 }
 
@@ -78,7 +78,7 @@ func (r *Rt) RunMethod(name string, args ...interface{}) []interface{} {
 
 func (r *Rt) CreateFakeClass(name string) *entity.Class {
 	return &entity.Class{
-		This:      name,
+		Name:      name,
 		Methods:   nil,
 		Constants: nil,
 		Super:     "",

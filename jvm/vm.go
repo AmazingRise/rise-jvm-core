@@ -23,7 +23,7 @@ func CreateVM(out io.Writer, in io.Reader) *VM {
 }
 
 func (v *VM) AppendClass(class *entity.Class) {
-	v.classes[class.This] = class
+	v.classes[class.Name] = class
 }
 
 // Boot to boot a JVM

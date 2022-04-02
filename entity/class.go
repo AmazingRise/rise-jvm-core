@@ -14,7 +14,7 @@ const (
 )
 
 type Class struct {
-	This      string
+	Name      string
 	Methods   map[string]*Method
 	Constants *ConstPool
 	Super     string

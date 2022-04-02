@@ -66,7 +66,7 @@ func (l *Loader) loadMeta() {
 	c.Flags = l.u2() // access_flags
 
 	thisIdx := l.u2()                // this_class
-	c.This = p.GetClassName(thisIdx) // get the name of this
+	c.Name = p.GetClassName(thisIdx) // get the name of this
 
 	superIdx := l.u2()                 // super_class
 	c.Super = p.GetClassName(superIdx) // get the name of super
