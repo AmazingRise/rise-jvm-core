@@ -3,19 +3,19 @@ package jvm
 import (
 	"io"
 	"rise-jvm-core/entity"
-	rt2 "rise-jvm-core/rt"
+	"rise-jvm-core/runtime"
 )
 
 type VM struct {
 	pool    *ThreadPool
 	classes map[string]*entity.Class
-	rt      *rt2.Rt
+	rt      *runtime.Rt
 }
 
 func CreateVM(out io.Writer, in io.Reader) *VM {
 	vm := &VM{
 		classes: make(map[string]*entity.Class),
-		rt:      rt2.CreateRt(out, in),
+		rt:      runtime.CreateRt(out, in),
 	}
 	vm.pool = vm.CreateThreadPool()
 
