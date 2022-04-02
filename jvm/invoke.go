@@ -50,11 +50,17 @@ func (v *VM) LocateMethod(className string, methodName string, desc string) *ent
 	if !ok {
 		logger.Errorln("unable to locate class", className)
 	}
-	method, ok := class.Methods[methodName]
+	methods, ok := class.Methods[methodName]
 	if !ok {
 		logger.Errorf("unable to locate method %s in class %s.\n", className, methodName)
 	}
-	return method
+	for _, method := range methods {
+		if method.Desc == desc {
+			return method
+		}
+	}
+	logger.Errorf("unable to locate method %s with description %s in class %s.\n", className, methodName, desc)
+	return nil
 }
 
 func (v *VM) LocateClass(className string) *entity.Class {
@@ -81,8 +87,11 @@ func (v *VM) InvokeMethod(method *entity.Method, args ...interface{}) *Frame {
 
 func (v *VM) InvokeRuntimeMethod(method *entity.Method, args ...interface{}) *Frame {
 	frame := &Frame{}
+	frame.Text = []byte{OpAReturn}
+	logger.Infoln("Calling runtime method "+method.Name+" with args ", args)
 	frame.Stack = v.rt.RunMethod(method.This.Name+"."+method.Name, args...)
-	frame.State = FrameExit
+	logger.Infoln("Runtime method "+method.Name+" returns", frame.Stack)
+	//frame.State = FrameExit
 	return frame
 }
 
@@ -104,9 +113,12 @@ func (v *VM) bootstrap() {
 
 func (v *VM) findMain() *entity.Method {
 	for _, c := range v.classes {
+		if !c.IsPublic() {
+			continue
+		}
 		main, ok := c.Methods["main"]
-		if c.IsPublic() && ok && main.IsPublic() && main.IsStatic() {
-			return main
+		if ok && len(main) == 1 && main[0].IsPublic() && main[0].IsStatic() {
+			return main[0]
 		}
 	}
 	return nil

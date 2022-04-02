@@ -46,6 +46,13 @@ func CreateRt(out io.Writer, in io.Reader) *Rt {
 		},
 	}
 
+	rt.MethodRef["java/lang/Boolean.valueOf"] = &RuntimeMethod{
+		Flags: entity.MethodStatic,
+		Fn: func(args ...interface{}) []interface{} {
+			return []interface{}{args[0].(int) == 1}
+		},
+	}
+
 	rt.Object = &entity.Class{
 		Name:      "java/lang/Object",
 		Methods:   nil,

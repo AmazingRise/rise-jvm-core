@@ -17,7 +17,7 @@ method_info {
 func (l *Loader) readMethods(count uint16) {
 	var i uint16
 	c := l.class
-	c.Methods = make(map[string]*entity.Method)
+	c.Methods = make(map[string][]*entity.Method)
 	for i = 0; i < count; i++ {
 		method := &entity.Method{}
 		method.Flags = l.u2() // access flags
@@ -31,8 +31,12 @@ func (l *Loader) readMethods(count uint16) {
 		aCount := l.u2() // attribute count
 		method.Attrs = l.ReadAttributes(aCount)
 		method.This = c
-		// TODO: Override
-		c.Methods[method.Name] = method
+		_, ok := c.Methods[method.Name]
+		if ok {
+			c.Methods[method.Name] = append(c.Methods[method.Name], method)
+		} else {
+			c.Methods[method.Name] = []*entity.Method{method}
+		}
 	}
 }
 

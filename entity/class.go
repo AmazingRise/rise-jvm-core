@@ -15,7 +15,7 @@ const (
 
 type Class struct {
 	Name      string
-	Methods   map[string]*Method
+	Methods   map[string][]*Method
 	Constants *ConstPool
 	Super     string
 	Flags     uint16

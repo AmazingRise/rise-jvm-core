@@ -102,8 +102,8 @@ func (p *ThreadPool) Schedule() {
 			if len(thread.FrameStack) > 1 {
 				// Delete the empty frame
 				thread.FrameStack = thread.FrameStack[:len(thread.FrameStack)-1]
-				last := thread.FrameStack[len(thread.FrameStack)-1]
 				// Transfer the stack
+				last := thread.FrameStack[len(thread.FrameStack)-1]
 				last.Stack = append(last.Stack, result...)
 				// Move to tail
 				p.moveToTail(thread)
@@ -125,7 +125,7 @@ func (p *ThreadPool) Schedule() {
 			class, name, desc := frame.This.Constants.GetMethodRef(idx)
 			method := p.vm.LocateMethod(class, name, desc)
 
-			paramCount := getParamCount(desc)
+			paramCount := GetParamCount(desc)
 			var params []interface{}
 			if !method.IsStatic() {
 				paramCount++
@@ -148,7 +148,7 @@ func (p *ThreadPool) Schedule() {
 	}
 }
 
-func getParamCount(desc string) int {
+func GetParamCount(desc string) int {
 	/*
 		B	byte	signed byte
 		C	char	Unicode character code point in the Basic Multilingual Plane, encoded with UTF-16

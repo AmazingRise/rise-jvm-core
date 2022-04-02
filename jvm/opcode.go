@@ -38,11 +38,13 @@ const (
 
 	OpDup = 0x59
 
-	OpIAdd    = 0x60
-	OpIMul    = 0x68
-	OpIReturn = 0xAC
+	OpIAdd = 0x60
+	OpIMul = 0x68
 
-	OpReturn    = 0xB1
+	OpIReturn = 0xAC
+	OpAReturn = 0xB0
+	OpReturn  = 0xB1
+
 	OpGetStatic = 0xB2
 	OpGetField  = 0xB4
 	OpPutField  = 0xB5
@@ -63,7 +65,11 @@ const (
 	OpIfICmpGe = 0xa2
 	OpIfICmpGt = 0xa3
 	OpIfICmpLe = 0xa4
-	OpGoto     = 0xa7
+
+	OpIfACmpEq = 0xa5
+	OpIfACmpNe = 0xa6
+
+	OpGoto = 0xa7
 
 	OpIInc = 0x84
 

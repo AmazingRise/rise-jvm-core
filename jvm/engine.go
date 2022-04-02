@@ -79,6 +79,8 @@ func (v *VM) Exec(f *Frame) []interface{} {
 			result := f.Stack[0].(int) * f.Stack[1].(int)
 			f.Stack = f.Stack[1:]
 			f.Stack[0] = result
+		case OpAReturn:
+			fallthrough
 		case OpIReturn:
 			f.State = FrameExit
 			f.PC++
@@ -179,6 +181,12 @@ func (v *VM) Exec(f *Frame) []interface{} {
 			return nil
 		case OpIfICmpLe:
 			f.condJmp(f.Stack[len(f.Stack)-2].(int) <= f.Stack[len(f.Stack)-1].(int))
+			return nil
+		case OpIfACmpEq:
+			f.condJmp(f.Stack[len(f.Stack)-2] == f.Stack[len(f.Stack)-1])
+			return nil
+		case OpIfACmpNe:
+			f.condJmp(f.Stack[len(f.Stack)-2] != f.Stack[len(f.Stack)-1])
 			return nil
 		case OpGoto:
 			offset := int16(f.Text[f.PC+1])<<8 + int16(f.Text[f.PC+2])

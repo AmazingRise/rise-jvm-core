@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"os"
+	"rise-jvm-core/jvm"
 	"runtime/pprof"
 	"testing"
 )
@@ -42,11 +44,16 @@ func TestMemoryLeak(t *testing.T) {
 	Verify(t, "demo/MemoryLeak.class", "")
 }
 
+func TestOverload(t *testing.T) {
+	Verify(t, "demo/Overload.class", "false\ntrue\nfalse\ntrue\n")
+}
+
 func TestAll(t *testing.T) {
 	t.Run("Add", TestAdd)
 	t.Run("Recursive", TestRecursive)
 	t.Run("Object", TestObj)
 	t.Run("For", TestFor)
+	t.Run("Overload", TestOverload)
 	//t.Run("Memory Leak", TestMemoryLeak)
 }
 
@@ -56,4 +63,8 @@ func Verify(t *testing.T, path string, out string) {
 	if out != buf.String() {
 		t.Errorf("excepted: %s\nbut: %s\n", out, buf.String())
 	}
+}
+
+func TestDesc(t *testing.T) {
+	fmt.Println(jvm.GetParamCount("(Ljava/lang/Object;)V"))
 }
