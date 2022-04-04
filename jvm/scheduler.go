@@ -1,7 +1,7 @@
 package jvm
 
 import (
-	"rise-jvm-core/logger"
+	"github.com/AmazingRise/rise-jvm-core/logger"
 	"strings"
 )
 

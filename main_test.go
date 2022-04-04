@@ -3,8 +3,8 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"github.com/AmazingRise/rise-jvm-core/jvm"
 	"os"
-	"rise-jvm-core/jvm"
 	"runtime/pprof"
 	"testing"
 )

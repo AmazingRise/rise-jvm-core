@@ -2,9 +2,9 @@ package runtime
 
 import (
 	"fmt"
+	"github.com/AmazingRise/rise-jvm-core/entity"
+	"github.com/AmazingRise/rise-jvm-core/logger"
 	"io"
-	"rise-jvm-core/entity"
-	"rise-jvm-core/logger"
 )
 
 // Mini Runtime

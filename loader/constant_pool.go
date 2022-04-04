@@ -1,8 +1,8 @@
 package loader
 
 import (
-	"rise-jvm-core/entity"
-	"rise-jvm-core/logger"
+	"github.com/AmazingRise/rise-jvm-core/entity"
+	"github.com/AmazingRise/rise-jvm-core/logger"
 )
 
 func (l *Loader) readConstantPool(count uint16) {

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/AmazingRise/rise-jvm-core/jvm"
+	"github.com/AmazingRise/rise-jvm-core/loader"
+	"github.com/AmazingRise/rise-jvm-core/logger"
 	"io"
 	"io/ioutil"
 	"os"
-	"rise-jvm-core/jvm"
-	"rise-jvm-core/loader"
-	"rise-jvm-core/logger"
 )
 
 func main() {

@@ -1,9 +1,9 @@
 package jvm
 
 import (
+	"github.com/AmazingRise/rise-jvm-core/entity"
+	"github.com/AmazingRise/rise-jvm-core/runtime"
 	"io"
-	"rise-jvm-core/entity"
-	"rise-jvm-core/runtime"
 )
 
 type VM struct {

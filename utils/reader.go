@@ -3,8 +3,8 @@ package utils
 import (
 	"bytes"
 	"encoding/binary"
+	"github.com/AmazingRise/rise-jvm-core/logger"
 	"io"
-	"rise-jvm-core/logger"
 )
 
 type Reader struct {

@@ -2,10 +2,10 @@ package loader
 
 import (
 	"bytes"
+	"github.com/AmazingRise/rise-jvm-core/entity"
+	"github.com/AmazingRise/rise-jvm-core/logger"
+	"github.com/AmazingRise/rise-jvm-core/utils"
 	"io"
-	"rise-jvm-core/entity"
-	"rise-jvm-core/logger"
-	"rise-jvm-core/utils"
 )
 
 type Loader struct {

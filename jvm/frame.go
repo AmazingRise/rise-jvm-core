@@ -1,7 +1,7 @@
 package jvm
 
 import (
-	"rise-jvm-core/entity"
+	"github.com/AmazingRise/rise-jvm-core/entity"
 )
 
 type Frame struct {

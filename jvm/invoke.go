@@ -2,9 +2,9 @@ package jvm
 
 import (
 	"bytes"
-	"rise-jvm-core/entity"
-	"rise-jvm-core/logger"
-	"rise-jvm-core/utils"
+	"github.com/AmazingRise/rise-jvm-core/entity"
+	"github.com/AmazingRise/rise-jvm-core/logger"
+	"github.com/AmazingRise/rise-jvm-core/utils"
 	"strings"
 )
 

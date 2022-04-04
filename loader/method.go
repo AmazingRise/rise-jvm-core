@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"rise-jvm-core/entity"
+	"github.com/AmazingRise/rise-jvm-core/entity"
 )
 
 /*
