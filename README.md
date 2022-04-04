@@ -13,21 +13,6 @@ Tested under:
 
 ## ✨Quick Start
 
-### Run a specific `.class` file
-
-1. Build it.
-```bash
-go build .
-```
-2. Pick a class from `demo` and run it!
-```bash
-./rise-jvm-core demo/Add
-```
-
-**NOTE**: the suffix `.class` should be emitted.
-
-### Run all test cases
-
 Just one line.
 
 ```bash
