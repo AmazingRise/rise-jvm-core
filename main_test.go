@@ -18,7 +18,7 @@ func TestMemory(t *testing.T) {
 	f, _ := os.OpenFile("mem.profile", os.O_CREATE|os.O_RDWR, 0644)
 	defer f.Close()
 	buf := bytes.NewBufferString("")
-	LoadAndRun("demo/Benchmark.class", buf, nil, true)
+	RunFromPath("demo/Benchmark.class", buf, nil, true)
 	pprof.Lookup("heap").WriteTo(f, 0)
 }
 
@@ -48,7 +48,7 @@ func TestOverload(t *testing.T) {
 
 func TestBenchmark(t *testing.T) {
 	buf := bytes.NewBufferString("")
-	LoadAndRun("demo/Benchmark.class", buf, nil, true)
+	RunFromPath("demo/Benchmark.class", buf, nil, true)
 }
 
 func TestAll(t *testing.T) {
@@ -62,7 +62,7 @@ func TestAll(t *testing.T) {
 
 func Verify(t *testing.T, path string, out string) {
 	buf := bytes.NewBufferString("")
-	LoadAndRun(path, buf, nil, false)
+	RunFromPath(path, buf, nil, false)
 	if out != buf.String() {
 		t.Errorf("excepted: %s\nbut: %s\n", out, buf.String())
 	}
