@@ -10,8 +10,8 @@ func (v *VM) Exec(f *Frame) []interface{} {
 	n := len(f.Text)
 	if int(f.PC) < n {
 		opcode := f.Text[f.PC]
-		logger.Infoln("Stack:", f.Stack)
-		logger.Infof("PC: %d, OpCode: %x", f.PC, opcode)
+		//logger.Infoln("Stack:", f.Stack)
+		//logger.Infof("PC: %d, OpCode: %x", f.PC, opcode)
 
 		switch opcode {
 		case OpNop:

@@ -17,10 +17,8 @@ type Case struct {
 func TestMemory(t *testing.T) {
 	f, _ := os.OpenFile("mem.profile", os.O_CREATE|os.O_RDWR, 0644)
 	defer f.Close()
-
-	for i := 0; i <= 1000; i++ {
-		main()
-	}
+	buf := bytes.NewBufferString("")
+	LoadAndRun("demo/Benchmark.class", buf, nil, true)
 	pprof.Lookup("heap").WriteTo(f, 0)
 }
 
@@ -46,6 +44,11 @@ func TestMemoryLeak(t *testing.T) {
 
 func TestOverload(t *testing.T) {
 	Verify(t, "demo/Overload.class", "false\ntrue\nfalse\ntrue\n")
+}
+
+func TestBenchmark(t *testing.T) {
+	buf := bytes.NewBufferString("")
+	LoadAndRun("demo/Benchmark.class", buf, nil, true)
 }
 
 func TestAll(t *testing.T) {

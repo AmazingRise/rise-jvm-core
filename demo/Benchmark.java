@@ -4,6 +4,6 @@ public class Benchmark {
         for (i=0;i<1000000;i++) {
 
         }
-        System.out.print(i);
+        System.out.println(i);
     }
 }

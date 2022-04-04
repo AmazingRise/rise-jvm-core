@@ -17,7 +17,7 @@ type ThreadPool struct {
 const (
 	ThreadReady   = 0
 	ThreadBlocked = 1
-	ThreadDead    = 2
+	ThreadExit    = 2
 )
 
 type Thread struct {
@@ -97,6 +97,11 @@ func (p *ThreadPool) Schedule() {
 		// Execute the last frameStack
 		result := p.vm.Exec(frame)
 
+		if thread.State == ThreadBlocked {
+			p.moveToTail(thread)
+			continue
+		}
+
 		switch frame.State {
 		case FrameExit:
 			if len(thread.FrameStack) > 1 {
@@ -145,6 +150,7 @@ func (p *ThreadPool) Schedule() {
 			thread.FrameStack = append(thread.FrameStack, newFrame)
 		}
 
+		p.moveToTail(thread)
 	}
 }
 

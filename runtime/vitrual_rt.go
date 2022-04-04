@@ -10,20 +10,20 @@ import (
 // Mini Runtime
 
 type Rt struct {
-	MethodRef map[string]*RuntimeMethod
+	MethodRef map[string]*Method
 	Object    *entity.Class
 }
 
-type RuntimeMethod struct {
+type Method struct {
 	Flags uint16
 	Fn    func(args ...interface{}) []interface{}
 }
 
 func CreateRt(out io.Writer, in io.Reader) *Rt {
 	rt := &Rt{
-		MethodRef: make(map[string]*RuntimeMethod),
+		MethodRef: make(map[string]*Method),
 	}
-	rt.MethodRef["java/io/PrintStream.println"] = &RuntimeMethod{
+	rt.MethodRef["java/io/PrintStream.println"] = &Method{
 		Flags: entity.MethodFinal,
 		Fn: func(args ...interface{}) []interface{} {
 			_, _ = fmt.Fprintln(out, args[1:]...)
@@ -31,7 +31,7 @@ func CreateRt(out io.Writer, in io.Reader) *Rt {
 		},
 	}
 
-	rt.MethodRef["java/io/PrintStream.print"] = &RuntimeMethod{
+	rt.MethodRef["java/io/PrintStream.print"] = &Method{
 		Flags: entity.MethodFinal,
 		Fn: func(args ...interface{}) []interface{} {
 			_, _ = fmt.Fprint(out, args[1:]...)
@@ -39,14 +39,14 @@ func CreateRt(out io.Writer, in io.Reader) *Rt {
 		},
 	}
 
-	rt.MethodRef["java/lang/Object.<init>"] = &RuntimeMethod{
+	rt.MethodRef["java/lang/Object.<init>"] = &Method{
 		Flags: 0,
 		Fn: func(args ...interface{}) []interface{} {
 			return nil
 		},
 	}
 
-	rt.MethodRef["java/lang/Boolean.valueOf"] = &RuntimeMethod{
+	rt.MethodRef["java/lang/Boolean.valueOf"] = &Method{
 		Flags: entity.MethodStatic,
 		Fn: func(args ...interface{}) []interface{} {
 			return []interface{}{args[0].(int) == 1}

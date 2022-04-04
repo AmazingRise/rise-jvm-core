@@ -81,7 +81,6 @@ func (v *VM) LocateClass(className string) *entity.Class {
 
 func (v *VM) InvokeMethod(method *entity.Method, args ...interface{}) *Frame {
 	// TODO: Some check
-	// TODO: Overwrite
 	return v.invoke(method, args...)
 }
 
