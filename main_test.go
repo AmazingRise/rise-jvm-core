@@ -62,7 +62,8 @@ func TestAll(t *testing.T) {
 
 func Verify(t *testing.T, path string, out string) {
 	buf := bytes.NewBufferString("")
-	RunFromPath(path, buf, nil, false)
+	fmt.Println("Testing", path)
+	RunFromPath(path, buf, nil, true)
 	if out != buf.String() {
 		t.Errorf("excepted: %s\nbut: %s\n", out, buf.String())
 	}

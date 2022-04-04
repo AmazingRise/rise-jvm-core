@@ -13,6 +13,8 @@ Tested under:
 
 ## ✨Quick Start
 
+### Run a specific `.class` file
+
 1. Build it.
 ```bash
 go build .
@@ -23,6 +25,14 @@ go build .
 ```
 
 **NOTE**: the suffix `.class` should be emitted.
+
+### Run all test cases
+
+Just one line.
+
+```bash
+go test
+```
 
 ## 🎄Structure
 
