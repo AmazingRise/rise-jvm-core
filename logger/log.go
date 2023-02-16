@@ -14,14 +14,6 @@ func InitLogger(debug, warn, error io.Writer) {
 	errLogger = log.New(error, "[ERROR] ", log.LstdFlags)
 }
 
-func Infoln(v ...interface{}) {
-	debugLogger.Println(v...)
-}
-
-func Infof(format string, v ...interface{}) {
-	debugLogger.Printf(format, v...)
-}
-
 func Warnln(v ...interface{}) {
 	warnLogger.Println(v...)
 }

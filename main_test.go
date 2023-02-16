@@ -46,9 +46,18 @@ func TestOverload(t *testing.T) {
 	Verify(t, "demo/Overload.class", "false\ntrue\nfalse\ntrue\n")
 }
 
+func TestPlus10(t *testing.T) {
+	Verify(t, "demo/Plus10.class", "25\n", "15")
+}
+
+func TestFib(t *testing.T) {
+	Verify(t, "/home/rise/Coding/rise-jvm-cli/Fib.class", "6765\n", "20")
+}
+
 func TestBenchmark(t *testing.T) {
 	buf := bytes.NewBufferString("")
 	RunFromPath("demo/Benchmark.class", buf, nil, true)
+	fmt.Println(buf.String())
 }
 
 func TestAll(t *testing.T) {
@@ -60,10 +69,10 @@ func TestAll(t *testing.T) {
 	//t.Run("Memory Leak", TestMemoryLeak)
 }
 
-func Verify(t *testing.T, path string, out string) {
+func Verify(t *testing.T, path string, out string, args ...string) {
 	buf := bytes.NewBufferString("")
 	fmt.Println("Testing", path)
-	RunFromPath(path, buf, nil, true)
+	RunFromPath(path, buf, nil, false, args...)
 	if out != buf.String() {
 		t.Errorf("excepted: %s\nbut: %s\n", out, buf.String())
 	}

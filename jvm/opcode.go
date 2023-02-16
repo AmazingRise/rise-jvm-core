@@ -19,6 +19,7 @@ const (
 	OpILoad3 = 0x1d
 
 	OpALoad  = 0x25
+	OpAALoad = 0x32
 	OpALoad0 = 0x2a
 	OpALoad1 = 0x2b
 	OpALoad2 = 0x2c
@@ -37,8 +38,10 @@ const (
 	OpAStore3 = 0x4e
 
 	OpDup = 0x59
+	OpPop = 0x57
 
 	OpIAdd = 0x60
+	OpISub = 0x64
 	OpIMul = 0x68
 
 	OpIReturn = 0xAC
@@ -65,6 +68,7 @@ const (
 	OpIfICmpGe = 0xa2
 	OpIfICmpGt = 0xa3
 	OpIfICmpLe = 0xa4
+	OpIfNe     = 0x9a
 
 	OpIfACmpEq = 0xa5
 	OpIfACmpNe = 0xa6

@@ -5,6 +5,7 @@ import (
 	"github.com/AmazingRise/rise-jvm-core/entity"
 	"github.com/AmazingRise/rise-jvm-core/logger"
 	"io"
+	"strconv"
 )
 
 // Mini Runtime
@@ -50,6 +51,15 @@ func CreateRt(out io.Writer, in io.Reader) *Rt {
 		Flags: entity.MethodStatic,
 		Fn: func(args ...interface{}) []interface{} {
 			return []interface{}{args[0].(int) == 1}
+		},
+	}
+
+	rt.MethodRef["java/lang/Integer.parseInt"] = &Method{
+		Flags: entity.MethodStatic,
+		Fn: func(args ...interface{}) []interface{} {
+			str := args[0].(string)
+			i, _ := strconv.Atoi(str)
+			return []interface{}{i}
 		},
 	}
 

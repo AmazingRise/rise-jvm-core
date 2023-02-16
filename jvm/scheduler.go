@@ -109,7 +109,10 @@ func (p *ThreadPool) Schedule() {
 				thread.FrameStack = thread.FrameStack[:len(thread.FrameStack)-1]
 				// Transfer the stack
 				last := thread.FrameStack[len(thread.FrameStack)-1]
-				last.Stack = append(last.Stack, result...)
+				if len(result) != 0 {
+					last.DataStack.Push(result[0])
+				}
+				//last.Stack = append(last.Stack, result...)
 				// Move to tail
 				p.moveToTail(thread)
 				logger.Infoln("Frame of thread", thread.Id, "exits, returns", result)
@@ -135,8 +138,14 @@ func (p *ThreadPool) Schedule() {
 			if !method.IsStatic() {
 				paramCount++
 			}
-			params = frame.Stack[len(frame.Stack)-paramCount:]
-			frame.Stack = frame.Stack[:len(frame.Stack)-paramCount]
+			//params = frame.Stack[len(frame.Stack)-paramCount:]
+			//frame.Stack = frame.Stack[:len(frame.Stack)-paramCount]
+			for i := 0; i < paramCount; i++ {
+				params = append(params, frame.DataStack.Pop())
+			}
+			for i, j := 0, len(params)-1; i < j; i, j = i+1, j-1 {
+				params[i], params[j] = params[j], params[i]
+			}
 			var newFrame *Frame
 			// If method's attr is nil, then it is a runtime method.
 			if method.Attrs == nil {

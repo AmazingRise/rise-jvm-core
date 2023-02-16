@@ -17,7 +17,7 @@ func main() {
 }
 
 // Run WASM entrance
-func Run(file io.Reader, out io.Writer, in io.Reader, silent bool) {
+func Run(file io.Reader, out io.Writer, in io.Reader, silent bool, args ...string) {
 	if silent {
 		logger.InitLogger(ioutil.Discard, ioutil.Discard, os.Stdout)
 	} else {
@@ -30,10 +30,10 @@ func Run(file io.Reader, out io.Writer, in io.Reader, silent bool) {
 
 	vm := jvm.CreateVM(out, in)
 	vm.AppendClass(class)
-	vm.Boot()
+	vm.Boot(args...)
 }
 
-func RunFromPath(path string, out io.Writer, in io.Reader, silent bool) {
+func RunFromPath(path string, out io.Writer, in io.Reader, silent bool, args ...string) {
 	if silent {
 		logger.InitLogger(ioutil.Discard, ioutil.Discard, os.Stdout)
 	} else {
@@ -47,5 +47,5 @@ func RunFromPath(path string, out io.Writer, in io.Reader, silent bool) {
 
 	vm := jvm.CreateVM(out, in)
 	vm.AppendClass(class)
-	vm.Boot()
+	vm.Boot(args...)
 }

@@ -10,18 +10,21 @@ import (
 
 // invoke create a frame
 func (v *VM) invoke(method *entity.Method, args ...interface{}) *Frame {
-	frame := &Frame{}
-	// If it is a patched method
-	logger.Infoln("Calling method", method.Name, "with args:", args)
-	// TODO: Some check, e.g. Abstract method should not be executed
+	var frame *Frame
 	// Load Text
 	for _, attr := range method.Attrs {
 		// fmt.Printf("%02X ", attr.Text)
 		if attr.Name == "Code" {
-			frame.ByteCode = *Load(attr.Bytes)
+			byteCode := *Load(attr.Bytes)
+			frame = CreateFrame(int(byteCode.MaxStack))
+			frame.ByteCode = byteCode
 			break
 		}
 	}
+
+	logger.Infoln("Calling method", method.Name, "with args:", args)
+	// TODO: Some check, e.g. Abstract method should not be executed
+
 	// Load arguments
 	frame.Locals = make([]interface{}, frame.MaxLocals)
 	n := len(args)
@@ -85,11 +88,16 @@ func (v *VM) InvokeMethod(method *entity.Method, args ...interface{}) *Frame {
 }
 
 func (v *VM) InvokeRuntimeMethod(method *entity.Method, args ...interface{}) *Frame {
-	frame := &Frame{}
-	frame.Text = []byte{OpAReturn}
+	frame := CreateFrame(0)
+	frame.Text = []byte{OpReturn}
 	logger.Infoln("Calling runtime method "+method.Name+" with args ", args)
-	frame.Stack = v.rt.RunMethod(method.This.Name+"."+method.Name, args...)
-	logger.Infoln("Runtime method "+method.Name+" returns", frame.Stack)
+	//frame.Stack = v.rt.RunMethod(method.This.Name+"."+method.Name, args...)
+	result := v.rt.RunMethod(method.This.Name+"."+method.Name, args...)
+	if len(result) != 0 {
+		frame.DataStack.Push(result[0])
+		frame.Text = []byte{OpAReturn}
+	}
+	//logger.Infoln("Runtime method "+method.Name+" returns", frame.Stack)
 	//frame.State = FrameExit
 	return frame
 }
@@ -97,17 +105,6 @@ func (v *VM) InvokeRuntimeMethod(method *entity.Method, args ...interface{}) *Fr
 func (v *VM) InvokeVirtualMethod(method *entity.Method, args ...interface{}) *Frame {
 	frame := v.invoke(method, args...)
 	return frame
-}
-
-// bootstrap find main and put the frame into a new thread
-func (v *VM) bootstrap() {
-	// search for a public class with a static main method
-	main := v.findMain()
-	if main == nil {
-		logger.Errorln("classes does not contain a main")
-	}
-	frame := v.invoke(main)
-	v.pool.CreateThread(frame)
 }
 
 func (v *VM) findMain() *entity.Method {

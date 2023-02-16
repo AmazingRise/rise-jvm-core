@@ -2,6 +2,7 @@ package jvm
 
 import (
 	"github.com/AmazingRise/rise-jvm-core/entity"
+	"github.com/AmazingRise/rise-jvm-core/logger"
 	"github.com/AmazingRise/rise-jvm-core/runtime"
 	"io"
 )
@@ -27,7 +28,19 @@ func (v *VM) AppendClass(class *entity.Class) {
 }
 
 // Boot to boot a JVM
-func (v *VM) Boot() {
-	v.bootstrap()
+func (v *VM) Boot(args ...string) {
+	// search for a public class with a static main method
+	main := v.findMain()
+	if main == nil {
+		logger.Errorln("classes does not contain a main")
+	}
+
+	arr := make([]interface{}, len(args))
+	for i := range arr {
+		arr[i] = args[i]
+	}
+
+	frame := v.InvokeMethod(main, arr)
+	v.pool.CreateThread(frame)
 	v.pool.Schedule()
 }
